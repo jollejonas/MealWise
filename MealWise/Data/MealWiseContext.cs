@@ -22,5 +22,17 @@ public class MealWiseContext : DbContext
         modelBuilder.Entity<MealPlanRecipe>()
             .Property(e => e.MealType)
             .HasConversion(new EnumToStringConverter<MealType>());
+
+        modelBuilder.Entity<MealPlanRecipe>()
+            .HasOne(e => e.Recipe)
+            .WithMany()
+            .HasForeignKey(e => e.RecipeId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<MealPlanRecipe>()
+            .HasOne(e => e.MealPlan)
+            .WithMany()
+            .HasForeignKey(e => e.MealPlanId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
