@@ -14,11 +14,17 @@ public class RecipeRepository : IRecipeRepository
     }
     public async Task<IEnumerable<Recipe>> GetRecipesAsync()
     {
-        return await _context.Recipes.ToListAsync();
+        return await _context.Recipes.
+            Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+            .ToListAsync();
     }
     public async Task<Recipe> GetRecipeByIdAsync(int id)
     {
-        return await _context.Recipes.FindAsync(id);
+        return await _context.Recipes
+            .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+            .FirstOrDefaultAsync(r => r.Id == id);
     }
     public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
     {

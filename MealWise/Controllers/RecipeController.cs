@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MealWise.Controllers;
 
-public class RecipeController
+[ApiController]
+[Route("api/recipes")]
+public class RecipeController : ControllerBase
 {
     private readonly IRecipeService _recipeService;
     public RecipeController(IRecipeService recipeService)

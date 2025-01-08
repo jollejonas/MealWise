@@ -24,5 +24,6 @@ public class Recipe
     public User User { get; set; }
     public DateOnly CreatedAt { get; set; }
     public DateOnly UpdatedAt { get; set; }
+    public ICollection<RecipeIngredient> RecipeIngredients { get; set; }
 
 }

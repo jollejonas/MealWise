@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MealWise.Migrations
 {
     [DbContext(typeof(MealWiseContext))]
-    [Migration("20250103214505_InitialCreate")]
+    [Migration("20250108234252_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -163,30 +163,25 @@ namespace MealWise.Migrations
 
             modelBuilder.Entity("MealWise.Models.RecipeIngredient", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("RecipeId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<double>("Quantity")
                         .HasColumnType("float");
 
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UnitOverride")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("RecipeId", "IngredientId");
 
                     b.HasIndex("IngredientId");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("RecipeIngredients");
                 });
@@ -298,13 +293,13 @@ namespace MealWise.Migrations
             modelBuilder.Entity("MealWise.Models.RecipeIngredient", b =>
                 {
                     b.HasOne("MealWise.Models.Ingredient", "Ingredient")
-                        .WithMany()
+                        .WithMany("RecipeIngredients")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MealWise.Models.Recipe", "Recipe")
-                        .WithMany()
+                        .WithMany("RecipeIngredients")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -323,6 +318,16 @@ namespace MealWise.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MealWise.Models.Ingredient", b =>
+                {
+                    b.Navigation("RecipeIngredients");
+                });
+
+            modelBuilder.Entity("MealWise.Models.Recipe", b =>
+                {
+                    b.Navigation("RecipeIngredients");
                 });
 #pragma warning restore 612, 618
         }
