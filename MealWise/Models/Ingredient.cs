@@ -10,5 +10,4 @@ public class Ingredient
     public string Name { get; set; }
     [Required]
     public string UnitType { get; set; }
-    public ICollection<RecipeIngredient> RecipeIngredients { get; set; }
 }
