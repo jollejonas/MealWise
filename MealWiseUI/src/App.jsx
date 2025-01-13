@@ -1,12 +1,22 @@
 import './App.css'
-import RecipeList from './components/Recipes/RecipeList/RecipeList'
 
 function App() {
 
   return (
-    <div>
-      <h1>MealWise</h1>
-      <RecipeList />
+    <div className="container-fluid">
+      <header className="mb-4">
+        <h1>Velkommen til MealWise</h1>
+      </header>
+      <div className="row">
+        <div className="col-md-6">
+          <h2>Opskrifter</h2>
+          <ul>
+            <li>Lasagne</li>
+            <li>Tacos</li>
+            <li>Salat</li>
+          </ul>
+        </div>
+      </div>
     </div>
   )
 }
