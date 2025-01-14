@@ -3,9 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const MainNavbar = () => {
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar className="d-flex justify-content-end px-4" bg="light" expand="lg">
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
+            <Navbar.Collapse className="justify-content-around" id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link href="#home">Home</Nav.Link>
                     <Nav.Link href="#link">Link</Nav.Link>
@@ -17,7 +17,11 @@ const MainNavbar = () => {
                         <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
-            <Navbar.Brand href="#home">MealWise</Navbar.Brand>
+                <Navbar.Brand href="#home">MealWise</Navbar.Brand>
+                <Nav className="ml-auto">
+                    <Nav.Link href="#link">Opret bruger</Nav.Link>
+                    <Nav.Link href="#link">Login</Nav.Link>
+                </Nav>
             </Navbar.Collapse>
         </Navbar>
     );
