@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace MealWise.Migrations
+namespace MealWiseAPI.Migrations
 {
     [DbContext(typeof(MealWiseContext))]
-    [Migration("20250109001138_UpdateIngredient")]
-    partial class UpdateIngredient
+    [Migration("20250115153053_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,32 @@ namespace MealWise.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Ingredients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Kartoffel",
+                            UnitType = "kg"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Ris",
+                            UnitType = "g"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Kyllingebryst",
+                            UnitType = "stk"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Æg",
+                            UnitType = "stk"
+                        });
                 });
 
             modelBuilder.Entity("MealWise.Models.MealPlan", b =>
@@ -74,6 +100,16 @@ namespace MealWise.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("MealPlans");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EndDate = new DateOnly(2025, 1, 22),
+                            Name = "Ugeplan",
+                            StartDate = new DateOnly(2025, 1, 15),
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("MealWise.Models.MealPlanRecipe", b =>
@@ -107,6 +143,17 @@ namespace MealWise.Migrations
                     b.HasIndex("RecipeId");
 
                     b.ToTable("MealPlanRecipes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Date = new DateOnly(2025, 1, 15),
+                            MealPlanId = 1,
+                            MealType = "Dinner",
+                            RecipeId = 1,
+                            ServingsOverride = 2
+                        });
                 });
 
             modelBuilder.Entity("MealWise.Models.Recipe", b =>
@@ -159,6 +206,36 @@ namespace MealWise.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Recipes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CookTime = 20,
+                            CreatedAt = new DateOnly(2025, 1, 15),
+                            Description = "En lækker kartoffelsalat med creme fraiche.",
+                            ImageUrl = "https://example.com/kartoffelsalat.jpg",
+                            Instructions = "1. Kog kartoflerne. 2. Bland ingredienserne.",
+                            PrepTime = 15,
+                            Servings = 4,
+                            Title = "Kartoffelsalat",
+                            UpdatedAt = new DateOnly(2025, 1, 15),
+                            UserId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CookTime = 30,
+                            CreatedAt = new DateOnly(2025, 1, 15),
+                            Description = "Kyllingebryst med ris og grøntsager.",
+                            ImageUrl = "https://example.com/kylling_med_ris.jpg",
+                            Instructions = "1. Steg kyllingen. 2. Kog risene.",
+                            PrepTime = 10,
+                            Servings = 2,
+                            Title = "Stegt kylling med ris",
+                            UpdatedAt = new DateOnly(2025, 1, 15),
+                            UserId = 2
+                        });
                 });
 
             modelBuilder.Entity("MealWise.Models.RecipeIngredient", b =>
@@ -184,6 +261,40 @@ namespace MealWise.Migrations
                     b.HasIndex("IngredientId");
 
                     b.ToTable("RecipeIngredients");
+
+                    b.HasData(
+                        new
+                        {
+                            RecipeId = 1,
+                            IngredientId = 1,
+                            Id = 1,
+                            Quantity = 0.5,
+                            UnitOverride = "kg"
+                        },
+                        new
+                        {
+                            RecipeId = 1,
+                            IngredientId = 4,
+                            Id = 2,
+                            Quantity = 3.0,
+                            UnitOverride = "stk"
+                        },
+                        new
+                        {
+                            RecipeId = 2,
+                            IngredientId = 2,
+                            Id = 3,
+                            Quantity = 200.0,
+                            UnitOverride = "g"
+                        },
+                        new
+                        {
+                            RecipeId = 2,
+                            IngredientId = 3,
+                            Id = 4,
+                            Quantity = 2.0,
+                            UnitOverride = "stk"
+                        });
                 });
 
             modelBuilder.Entity("MealWise.Models.ShoppingList", b =>
@@ -212,6 +323,69 @@ namespace MealWise.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ShoppingLists");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateOnly(2025, 1, 15),
+                            Status = "Active",
+                            UpdatedAt = new DateOnly(2025, 1, 15),
+                            UserId = 1
+                        });
+                });
+
+            modelBuilder.Entity("MealWise.Models.ShoppingListItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Checked")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShoppingListId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UnitOverride")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IngredientId");
+
+                    b.HasIndex("ShoppingListId");
+
+                    b.ToTable("ShoppingListItem");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Checked = false,
+                            IngredientId = 1,
+                            Quantity = 1,
+                            ShoppingListId = 1,
+                            UnitOverride = "kg"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Checked = true,
+                            IngredientId = 2,
+                            Quantity = 500,
+                            ShoppingListId = 1,
+                            UnitOverride = "g"
+                        });
                 });
 
             modelBuilder.Entity("MealWise.Models.User", b =>
@@ -247,6 +421,28 @@ namespace MealWise.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 1, 15, 16, 30, 52, 615, DateTimeKind.Local).AddTicks(2531),
+                            Email = "john.doe@example.com",
+                            Name = "John Doe",
+                            PasswordHash = "hashedpassword123",
+                            UpdatedAt = new DateTime(2025, 1, 15, 16, 30, 52, 617, DateTimeKind.Local).AddTicks(5307),
+                            Username = "johndoe"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 1, 15, 16, 30, 52, 617, DateTimeKind.Local).AddTicks(5560),
+                            Email = "jane.doe@example.com",
+                            Name = "Jane Doe",
+                            PasswordHash = "hashedpassword456",
+                            UpdatedAt = new DateTime(2025, 1, 15, 16, 30, 52, 617, DateTimeKind.Local).AddTicks(5566),
+                            Username = "janedoe"
+                        });
                 });
 
             modelBuilder.Entity("MealWise.Models.MealPlan", b =>
@@ -318,6 +514,25 @@ namespace MealWise.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MealWise.Models.ShoppingListItem", b =>
+                {
+                    b.HasOne("MealWise.Models.Ingredient", "Ingredient")
+                        .WithMany()
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MealWise.Models.ShoppingList", "ShoppingList")
+                        .WithMany()
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
+
+                    b.Navigation("ShoppingList");
                 });
 
             modelBuilder.Entity("MealWise.Models.Recipe", b =>

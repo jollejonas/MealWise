@@ -19,28 +19,52 @@ public class MealWiseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Enum konvertering
         modelBuilder.Entity<MealPlanRecipe>()
             .Property(e => e.MealType)
             .HasConversion(new EnumToStringConverter<MealType>());
 
+        // Relationer og sletteadfærd
         modelBuilder.Entity<MealPlanRecipe>()
             .HasOne(e => e.Recipe)
             .WithMany()
             .HasForeignKey(e => e.RecipeId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<MealPlanRecipe>()
-            .HasOne(e => e.MealPlan)
-            .WithMany()
-            .HasForeignKey(e => e.MealPlanId)
-            .OnDelete(DeleteBehavior.Cascade);
-
         modelBuilder.Entity<RecipeIngredient>()
             .HasKey(ri => new { ri.RecipeId, ri.IngredientId });
 
-        modelBuilder.Entity<RecipeIngredient>()
-            .HasOne(ri => ri.Recipe)
-            .WithMany(r => r.RecipeIngredients)
-            .HasForeignKey(ri => ri.RecipeId);
+        // Seed Users
+        modelBuilder.Entity<User>().HasData(
+            new User { Id = 1, Username = "johndoe", PasswordHash = "hashedpassword123", Email = "john.doe@example.com", Name = "John Doe", CreatedAt = new DateTime(2025, 1, 1), UpdatedAt = new DateTime(2025, 1, 1) }
+        );
+
+        // Seed Ingredients
+        modelBuilder.Entity<Ingredient>().HasData(
+            new Ingredient { Id = 1, Name = "Kartoffel", UnitType = "kg" }
+        );
+
+        // Seed Recipes
+        modelBuilder.Entity<Recipe>().HasData(
+            new Recipe
+            {
+                Id = 1,
+                Title = "Kartoffelsalat",
+                Description = "Lækker salat",
+                Instructions = "Kog kartoflerne og skær dem i skiver. Bland dem med mayonnaise og purløg.",
+                PrepTime = 15,
+                CookTime = 20,
+                Servings = 4,
+                ImageUrl = "",
+                UserId = 1,
+                CreatedAt = DateOnly.FromDateTime(new DateTime(2025, 1, 1)),
+                UpdatedAt = DateOnly.FromDateTime(new DateTime(2025, 1, 1))
+            }
+        );
+
+        // Seed RecipeIngredients
+        modelBuilder.Entity<RecipeIngredient>().HasData(
+            new RecipeIngredient { RecipeId = 1, IngredientId = 1, Quantity = 0.5, UnitOverride = "kg" }
+        );
     }
 }
