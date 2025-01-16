@@ -1,21 +1,36 @@
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { Link } from 'react-router';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState } from 'react';
+import RecipeModal from '../Recipes/RecipeModal/RecipeModal';
+import MealPlanModal from '../MealPlans/MealPlanModal/MealPlanModal';
+import ShoppingListModal from '../ShoppingLists/ShoppingListModal/ShoppingListModal';
 
-const MainNavbar = () => {
+function MainNavbar() {
+    const [activeModal, setActiveModal] = useState(null);
+
+    const handleOpenModal = (modalType => {
+        setActiveModal(modalType);
+    })
+
+    const handleCloseModal = () => {
+        setActiveModal(null);
+    }
+
     return (
+        <>
         <Navbar className="d-flex justify-content-end px-4" bg="light" expand="lg">
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-around" id="basic-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link as={Link} to="/">Home</Nav.Link>
                     <Nav.Link as={Link} to="/opskrifter">Opskrifter</Nav.Link>
-                    <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                    <Nav.Link as={Link} to="/madplaner">Madplaner</Nav.Link>
+                    <Nav.Link as={Link} to="/indkobsliste">Indkøbsliste</Nav.Link>
+                    <NavDropdown title="Opret" id="basic-nav-dropdown">
+                        <NavDropdown.Item onClick={() => handleOpenModal("recipe")}>Opskrift</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => handleOpenModal("mealPlan")}>Madplan</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => handleOpenModal("shoppingList")}>Indkøbsliste</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
                 <Navbar.Brand href="#home">MealWise</Navbar.Brand>
@@ -25,6 +40,11 @@ const MainNavbar = () => {
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
+
+        {activeModal === "recipe" && <RecipeModal show={true} handleClose={handleCloseModal} handleSave={() => {}} />}
+        {activeModal === 'mealPlan' && <MealPlanModal show={true} handleClose={handleCloseModal} handleSave={() => {}}  />}
+        {activeModal === 'shoppingList' && <ShoppingListModal show={true} handleClose={handleCloseModal} handleSave={() => {}}  />}
+        </>
     );
 };
 
