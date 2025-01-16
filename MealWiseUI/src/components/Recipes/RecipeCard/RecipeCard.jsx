@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
 
-function RecipeCard({ name }) {
-    return <li>{name}</li>;
+function RecipeCard({ recipe }) {
+    return (
+    <li>{recipe.title}</li>
+    )
 }
 
 export default RecipeCard;
 
 RecipeCard.propTypes = {
-    name: PropTypes.string.isRequired,
+    recipe: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+    }).isRequired,
 };

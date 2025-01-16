@@ -1,38 +1,33 @@
 import './RecipeList.css';
 import RecipeCard from '../RecipeCard/RecipeCard';
-import { useState } from 'react';
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+
+const fetchRecipes = async () => {
+    const response = await axios.get('https://localhost:7104/api/recipes');
+    console.log('API response:', response.data); // Debug API-svaret
+    return response.data.$values;
+}
 
 function RecipeList() {
-    const [recipes, setRecipes] = useState(['Lasagna', 'Tacos', 'Salad']);
-    const [newRecipe, setNewRecipe] = useState('');
+    const {data, isLoading, error } = useQuery({
+        queryKey: ['recipes'],
+        queryFn: fetchRecipes
+});
 
-    const addRecipe = () => {
-        setRecipes([...recipes, newRecipe]);
-        setNewRecipe('');
-    }
-    const removeRecipe = (index) => {
-        const newRecipes = [...recipes];
-        newRecipes.splice(index, 1);
-        setRecipes(newRecipes);
-    }
+    if (isLoading) return <p>Loading...</p>
+    if (error) return <p>Something went wrong: {error.message}</p>
 
+    if (!Array.isArray(data)) return <p>No recipes found.</p>; // Håndter ikke-array-data
+    
     return (
         <div>
             <h2>Opskrifter</h2>
             <ul>
-                {recipes.map((recipe, index) => (
-                    <div key={index}>
-                    <RecipeCard name = {recipe}/>
-                    <button onClick={() => removeRecipe(index)}>Fjern opskrift</button>
-                    </div>
+                {data.map((recipe) => (
+                    <RecipeCard key={recipe.id} recipe={recipe} />
                 ))}
             </ul>
-            <input
-                type='text'
-                value={newRecipe}
-                onChange={(e) => setNewRecipe(e.target.value)}
-            />
-            <button onClick={addRecipe}>Tilføj opskrift</button>
         </div>
     );
 }
