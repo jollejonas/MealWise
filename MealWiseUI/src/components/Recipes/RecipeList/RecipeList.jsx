@@ -3,6 +3,7 @@ import RecipeCard from '../RecipeCard/RecipeCard';
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from 'prop-types';
+import { Container, Row } from 'react-bootstrap';
 
 const fetchRecipes = async () => {
     const response = await axios.get('https://localhost:7104/api/recipes');
@@ -27,14 +28,14 @@ function RecipeList({ numRecipes, loadMore }) {
     if (!Array.isArray(data)) return <p>No recipes found.</p>; // Håndter ikke-array-data
     
     return (
-        <div className="container">
-            <div className='row'>
+        <Container>
+            <Row>
                 {data.slice(0,numRecipes).map((recipe) => (
                     <RecipeCard key={recipe.id} recipe={recipe} />
                 ))}
-            </div>
+            </Row>
             {loadMore && <button className='btn btn-primary' onClick={handleLoadMore}>Load more</button>}
-        </div>
+        </Container>
     );
 }
 

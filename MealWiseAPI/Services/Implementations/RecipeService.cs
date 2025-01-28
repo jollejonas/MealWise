@@ -8,9 +8,11 @@ namespace MealWise.Services.Implementations;
 public class RecipeService : IRecipeService
 {
     private readonly IRecipeRepository _recipeRepository;
-    public RecipeService(IRecipeRepository recipeRepository)
+    private readonly IIngredientService _ingredientService;
+    public RecipeService(IRecipeRepository recipeRepository, IIngredientService ingredientService)
     {
         _recipeRepository = recipeRepository;
+        _ingredientService = ingredientService;
     }
     public async Task<IEnumerable<Recipe>> GetRecipesAsync()
     {
@@ -22,7 +24,28 @@ public class RecipeService : IRecipeService
     }
     public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
     {
-        return await _recipeRepository.CreateRecipeAsync(recipe);
+        foreach (var recipeIngredient in recipe.RecipeIngredients)
+        {
+            if (recipeIngredient.Ingredient == null)
+            {
+                throw new ArgumentNullException(nameof(recipeIngredient.Ingredient), "Ingredient cannot be null");
+            }
+
+            var ingredient = await _ingredientService.GetOrCreateIngredientAsync(
+                recipeIngredient.Ingredient.Name,
+                recipeIngredient.Ingredient.UnitType ?? recipeIngredient.UnitOverride
+            );
+
+            recipeIngredient.IngredientId = ingredient.Id;
+            recipeIngredient.RecipeId = recipe.Id;
+        }
+
+        recipe.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
+        recipe.UpdatedAt = DateOnly.FromDateTime(DateTime.Now);
+
+        await _recipeRepository.CreateRecipeAsync(recipe);
+
+        return recipe;
     }
     public async Task<Recipe> UpdateRecipeAsync(Recipe recipe)
     {

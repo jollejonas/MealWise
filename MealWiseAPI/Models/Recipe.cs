@@ -19,9 +19,9 @@ public class Recipe
     [Required]
     [Range(0, 1000)]
     public int Servings { get; set; }
-    public string ImageUrl { get; set; }
-    public int UserId { get; set; }
-    public User User { get; set; }
+    public string? ImageUrl { get; set; }
+    public int? UserId { get; set; }
+    public User? User { get; set; }
     public DateOnly CreatedAt { get; set; }
     public DateOnly UpdatedAt { get; set; }
     public ICollection<RecipeIngredient> RecipeIngredients { get; set; }

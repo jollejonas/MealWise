@@ -1,10 +1,12 @@
+import './RecipeCard.css';
 import PropTypes from 'prop-types';
+import Image from 'react-bootstrap/Image';
 
 function RecipeCard({ recipe }) {
     return (
     <div className='col'>
         <h3>{recipe.title}</h3>
-        <img src={recipe.image} alt={recipe.title} />
+        <Image rounded className="img-max" src={"https://localhost:7104/" + recipe.imageUrl} alt={recipe.title} />
         <p>{recipe.description}</p>
     </div>
     )
@@ -16,6 +18,6 @@ RecipeCard.propTypes = {
     recipe: PropTypes.shape({
         title: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
-        image: PropTypes.string.isRequired,
+        imageUrl: PropTypes.string.isRequired,
     }).isRequired
 };

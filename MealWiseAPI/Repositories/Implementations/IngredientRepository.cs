@@ -38,4 +38,24 @@ public class IngredientRepository : IIngredientRepository
         _context.Ingredients.Remove(ingredient);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<Ingredient> GetOrCreateIngredientAsync(string name, string unitType)
+    {
+        var ingredient = await _context.Ingredients
+            .FirstOrDefaultAsync(i => i.Name.ToLower() == name.ToLower());
+
+        if (ingredient == null)
+        {
+            ingredient = new Ingredient
+            {
+                Name = name,
+                UnitType = unitType
+            };
+
+            _context.Ingredients.Add(ingredient);
+            await _context.SaveChangesAsync();
+        }
+
+        return ingredient;
+    }
 }

@@ -134,7 +134,6 @@ namespace MealWiseAPI.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Instructions")
@@ -156,7 +155,7 @@ namespace MealWiseAPI.Migrations
                     b.Property<DateOnly>("UpdatedAt")
                         .HasColumnType("date");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -197,7 +196,6 @@ namespace MealWiseAPI.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("UnitOverride")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RecipeId", "IngredientId");
@@ -326,9 +324,7 @@ namespace MealWiseAPI.Migrations
                 {
                     b.HasOne("MealWise.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });

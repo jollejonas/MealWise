@@ -9,4 +9,5 @@ public interface IIngredientRepository
     Task<Ingredient> CreateIngredientAsync(Ingredient ingredient);
     Task<Ingredient> UpdateIngredientAsync(Ingredient ingredient);
     Task DeleteIngredientAsync(int id);
+    Task<Ingredient> GetOrCreateIngredientAsync(string name, string unitType);
 }

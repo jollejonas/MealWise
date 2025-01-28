@@ -32,4 +32,8 @@ public class IngredientService : IIngredientService
     {
         await _ingredientRepository.DeleteIngredientAsync(id);
     }
+    public async Task<Ingredient> GetOrCreateIngredientAsync(string name, string unitType)
+    {
+        return await _ingredientRepository.GetOrCreateIngredientAsync(name, unitType);
+    }
 }
