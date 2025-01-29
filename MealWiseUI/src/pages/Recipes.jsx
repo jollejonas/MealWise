@@ -1,6 +1,6 @@
 import RecipeList from "../components/Recipes/RecipeList/RecipeList";
 
-function Opskrifter() {
+function Recipes() {
     return (
         <div className="container">
             <h1>Opskrifter</h1>
@@ -11,4 +11,4 @@ function Opskrifter() {
     );
 }
 
-export default Opskrifter;
+export default Recipes;

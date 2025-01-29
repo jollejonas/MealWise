@@ -1,14 +1,23 @@
 import './RecipeCard.css';
 import PropTypes from 'prop-types';
 import Image from 'react-bootstrap/Image';
+import { Link } from 'react-router-dom';
+import { Col } from 'react-bootstrap';
 
 function RecipeCard({ recipe }) {
+    if (recipe.imageUrl === null || recipe.imageUrl === "") {
+        recipe.imageUrl = "https://fastly.picsum.photos/id/220/500/300.jpg?hmac=HVBg4X-ejEAUICcGyVo8L34MiRIAOWnfVqkXmr-W9e0";
+    } else if (!recipe.imageUrl.startsWith("http")) {
+        recipe.imageUrl = ("https://localhost:7104/" + recipe.imageUrl);
+    }
     return (
-    <div className='col'>
-        <h3>{recipe.title}</h3>
-        <Image rounded className="img-max" src={"https://localhost:7104/" + recipe.imageUrl} alt={recipe.title} />
-        <p>{recipe.description}</p>
-    </div>
+        <Col>
+            <h4 className="py-3">{recipe.title}</h4>
+            <Image rounded className="img-max" src={recipe.imageUrl} alt={recipe.title} />
+            <p>{recipe.description}</p>
+            <Link to={`/opskrift/${recipe.id}`}> Se opskrift
+            </Link>
+        </Col>
     )
 }
 
@@ -16,6 +25,7 @@ export default RecipeCard;
 
 RecipeCard.propTypes = {
     recipe: PropTypes.shape({
+        id: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         imageUrl: PropTypes.string.isRequired,

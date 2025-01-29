@@ -74,7 +74,7 @@ function DynamicIngredients({ ingredients, setIngredients }) {
       ))}
 
       {/* Tilføj ingrediens */}
-      <Button variant="primary" onClick={addIngredient}>
+      <Button className="my-2" variant="primary" onClick={addIngredient}>
         Tilføj en ingrediens
       </Button>
       </>

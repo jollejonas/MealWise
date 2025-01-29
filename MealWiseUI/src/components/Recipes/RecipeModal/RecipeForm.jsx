@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
-import DynamicIngredients from '../../Ingredients/DynamicIngreidents/DynamicIngredientsModal';
+import { Container, Button, Form, Row, Col } from 'react-bootstrap';
+import DynamicIngredients from '../../Ingredients/DynamicIngreidents/DynamicIngredients';
 import axios from 'axios';
 
-const RecipeModal = ({ show, handleClose, handleSave }) => {
+const RecipeForm = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [servings, setServings] = useState(0);
@@ -13,6 +13,17 @@ const RecipeModal = ({ show, handleClose, handleSave }) => {
     const [instructions, setInstructions] = useState('');
     const [ingredients, setIngredients] = useState([{ name: '', quantity: '', unit: '' }]);
     const [image, setImage] = useState(null);
+
+    const handleSave = async (newRecipe) => {
+        try {
+            const response = await axios.post('https://localhost:7104/api/recipes', newRecipe);
+            console.log("Recipe created", response.data);
+        }
+
+        catch (error) {
+            console.error("Error creating recipe", error);
+        }
+    };
 
  
         const onSave = async () => {
@@ -48,17 +59,12 @@ const RecipeModal = ({ show, handleClose, handleSave }) => {
                     quantity: parseFloat(ingredient.quantity) || 0
                 })),
         };
-        console.log(newRecipe)
         handleSave(newRecipe);
-        handleClose();
     };
 
     return (
-        <Modal show={show} onHide={handleClose} size="lg">
-            <Modal.Header closeButton>
-                <Modal.Title>Opret ny opskrift</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
+        <Container>
+                <h1>Opret ny opskrift</h1>
                 <Form>
                     <Form.Group controlId="formTitle">
                         <Form.Label>Opskrifts navn</Form.Label>
@@ -158,23 +164,17 @@ const RecipeModal = ({ show, handleClose, handleSave }) => {
                         <DynamicIngredients ingredients={ingredients} setIngredients={setIngredients} />
                     </Form.Group>
                 </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Luk vindue
-                </Button>
                 <Button variant="primary" onClick={onSave}>
                     Opret opskrift
                 </Button>
-            </Modal.Footer>
-        </Modal>
+            </Container>
     );
 };
 
-RecipeModal.propTypes = {
+RecipeForm.propTypes = {
     show: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     handleSave: PropTypes.func.isRequired,
 };
 
-export default RecipeModal;
+export default RecipeForm;
