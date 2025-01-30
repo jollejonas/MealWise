@@ -1,0 +1,12 @@
+.sizing{
+    min-height: 50px;
+}
+
+.dropped-recipe {
+    padding: 5px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    background-color: #e0ffe0;
+    border-radius: 4px;
+    text-align: center;
+}
