@@ -3,7 +3,7 @@ import { useDroppable } from "@dnd-kit/core";
 import PropTypes from 'prop-types';
 import './DailyPlan.css';
 
-function DailyPlan({ day, meals, recipes }) {
+function DailyPlan({ day, mealPlanRecipes, recipes }) {
     const {setNodeRef: breakfastDroppable} = useDroppable({
         id: `${day}-breakfast`,
     });
@@ -22,37 +22,42 @@ function DailyPlan({ day, meals, recipes }) {
         return recipe ? recipe.title : "Ukendt opskrift";
     };
 
+    const filterMeals = (mealType) => {
+        console.log(mealPlanRecipes);
+        return mealPlanRecipes.filter((r) => r.mealType.toLowerCase() === mealType.toLowerCase());
+    }
+
     return (
         <Col>
         <Container className="border border-dark">
-            <h4> { day }</h4>
+            <h5> { day }</h5>
             <p>Morgenmad</p>
             <div ref={breakfastDroppable} className="border border-black sizing">
-                    {meals.breakfast.map((id, index) => (
+                    {filterMeals("breakfast").map((r, index) => (
                         <div key={index} className="dropped-recipe">
-                            {getRecipeName(Number(id))}
+                            {getRecipeName(Number(r.recipeId))}
                         </div>
                     ))}
                     </div>
             <p>Frokost</p>
             <div ref={lunchDroppable} className="border border-black sizing">
-                    {meals.lunch.map((id, index) => (
+                {filterMeals("lunch").map((r, index) => (
                         <div key={index} className="dropped-recipe">
-                            {getRecipeName(Number(id))}
+                            {getRecipeName(Number(r.recipeId))}
                         </div>
                     ))}</div>
             <p>Aftensmad</p>
             <div ref={dinnerDroppable} className="border border-black sizing">
-                    {meals.dinner.map((id, index) => (
+                {filterMeals("dinner").map((r, index) => (
                         <div key={index} className="dropped-recipe">
-                            {getRecipeName(Number(id))}
+                            {getRecipeName(Number(r.recipeId))}
                         </div>
                     ))}</div>
             <p>Snack</p>
             <div ref={snackDroppable} className="border border-black sizing">
-                    {meals.snack.map((id, index) => (
+                {filterMeals("snack").map((r, index) => (
                         <div key={index} className="dropped-recipe">
-                            {getRecipeName(Number(id))}
+                            {getRecipeName(Number(r.recipeId))}
                         </div>
                     ))}
             </div>
@@ -63,12 +68,13 @@ function DailyPlan({ day, meals, recipes }) {
 
 DailyPlan.propTypes = {
     day: PropTypes.string.isRequired,
-    meals: PropTypes.shape({
-        breakfast: PropTypes.arrayOf(PropTypes.number).isRequired,
-        lunch: PropTypes.arrayOf(PropTypes.number).isRequired,
-        dinner: PropTypes.arrayOf(PropTypes.number).isRequired,
-        snack: PropTypes.arrayOf(PropTypes.number).isRequired,
-    }).isRequired,
+    mealPlanRecipes: PropTypes.arrayOf(
+        PropTypes.shape({
+            date: PropTypes.string.isRequired,
+            mealType: PropTypes.string.isRequired,
+            recipeId: PropTypes.number.isRequired,
+        })
+    ).isRequired,
     recipes: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number.isRequired,

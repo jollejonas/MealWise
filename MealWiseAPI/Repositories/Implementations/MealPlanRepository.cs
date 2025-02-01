@@ -14,11 +14,17 @@ public class MealPlanRepository : IMealPlanRepository
     }
     public async Task<IEnumerable<MealPlan>> GetMealPlansAsync()
     {
-        return await _context.MealPlans.ToListAsync();
+        return await _context.MealPlans
+            .Include(m => m.MealPlanRecipes)
+                .ThenInclude(mpr => mpr.Recipe)
+            .ToListAsync();
     }
     public async Task<MealPlan> GetMealPlanByIdAsync(int id)
     {
-        return await _context.MealPlans.FindAsync(id);
+        return await _context.MealPlans
+            .Include(m => m.MealPlanRecipes)
+                .ThenInclude(mpr => mpr.Recipe)
+            .FirstOrDefaultAsync(m => m.Id == id);
     }
     public async Task<MealPlan> CreateMealPlanAsync(MealPlan mealPlan)
     {

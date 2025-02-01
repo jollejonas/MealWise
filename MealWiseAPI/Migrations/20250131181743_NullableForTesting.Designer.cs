@@ -4,6 +4,7 @@ using MealWise.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MealWiseAPI.Migrations
 {
     [DbContext(typeof(MealWiseContext))]
-    partial class MealWiseContextModelSnapshot : ModelSnapshot
+    [Migration("20250131181743_NullableForTesting")]
+    partial class NullableForTesting
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -302,7 +305,7 @@ namespace MealWiseAPI.Migrations
             modelBuilder.Entity("MealWise.Models.MealPlanRecipe", b =>
                 {
                     b.HasOne("MealWise.Models.MealPlan", "MealPlan")
-                        .WithMany("MealPlanRecipes")
+                        .WithMany()
                         .HasForeignKey("MealPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -355,11 +358,6 @@ namespace MealWiseAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MealWise.Models.MealPlan", b =>
-                {
-                    b.Navigation("MealPlanRecipes");
                 });
 
             modelBuilder.Entity("MealWise.Models.Recipe", b =>

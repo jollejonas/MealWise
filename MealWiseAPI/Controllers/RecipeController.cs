@@ -38,6 +38,7 @@ public class RecipeController : ControllerBase
     {
         await _recipeService.DeleteRecipeAsync(id);
     }
+
     [HttpPost("upload-image")]
     [Consumes("multipart/form-data")]
     public async Task<IActionResult> UploadImage(IFormFile file)

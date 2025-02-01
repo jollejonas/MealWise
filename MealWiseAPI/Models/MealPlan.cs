@@ -10,8 +10,9 @@ public class MealPlan
     [MaxLength(70)]
     public string Name { get; set; }
     [ForeignKey("UserId")]
-    public int UserId { get; set; }
-    public User User { get; set; }
+    public int? UserId { get; set; }
+    public User? User { get; set; }
     public DateOnly StartDate { get; set; }
     public DateOnly EndDate { get; set; }
+    public ICollection<MealPlanRecipe> MealPlanRecipes { get; set; }
 }
