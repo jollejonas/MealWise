@@ -22,7 +22,7 @@ const fetchRecipes = async () => {
     const response = await axios.get('https://localhost:7104/api/recipes');
     console.log('API response:', response.data);
 
-    const recipes = response.data.$values || response.data;
+    const recipes = response.data || response.data;
     return recipes.map((recipe) => ({
         ...recipe,
         id: Number(recipe.id),

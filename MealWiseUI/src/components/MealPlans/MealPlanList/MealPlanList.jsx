@@ -1,17 +1,16 @@
-import './RecipeList.css';
-import RecipeCard from '../RecipeCard/RecipeCard';
+import MealPlanRow from '../MealPlanRow/MealPlanRow';
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from 'prop-types';
-import { Container, Row } from 'react-bootstrap';
+import { Container} from 'react-bootstrap';
 
-const fetchRecipes = async () => {
+const fetchMealPlans = async () => {
     const response = await axios.get('https://localhost:7104/api/mealplans');
     console.log('API response:', response.data); // Debug API-svaret
-    return response.data.$values;
+    return response.data;
 }
 
-function RecipeList({ numMealPlans, loadMore }) {
+function MealPlanList({ numMealPlans, loadMore }) {
 
     const handleLoadMore = () => {
         numMealPlans += 3;
@@ -19,7 +18,7 @@ function RecipeList({ numMealPlans, loadMore }) {
 
     const {data, isLoading, error } = useQuery({
         queryKey: ['mealplans'],
-        queryFn: fetchRecipes
+        queryFn: fetchMealPlans
     });
 
     if (isLoading) return <p>Loading...</p>
@@ -29,19 +28,17 @@ function RecipeList({ numMealPlans, loadMore }) {
     
     return (
         <Container>
-            <Row>
                 {data.slice(0,numMealPlans).map((mealPlan) => (
-                    <RecipeCard key={mealPlan.id} recipe={mealPlan} />
+                    <MealPlanRow key={mealPlan.id} mealPlan={mealPlan} />
                 ))}
-            </Row>
             {loadMore && <button className='btn btn-primary' onClick={handleLoadMore}>Load more</button>}
         </Container>
     );
 }
 
-export default RecipeList
+export default MealPlanList
 
-RecipeList.propTypes = {
+MealPlanList.propTypes = {
     numMealPlans: PropTypes.number.isRequired,
     loadMore: PropTypes.bool.isRequired,
 };

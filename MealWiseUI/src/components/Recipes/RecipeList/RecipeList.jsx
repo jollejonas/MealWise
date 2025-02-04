@@ -8,7 +8,7 @@ import { Container, Row } from 'react-bootstrap';
 const fetchRecipes = async () => {
     const response = await axios.get('https://localhost:7104/api/recipes');
     console.log('API response:', response.data); // Debug API-svaret
-    return response.data.$values;
+    return response.data;
 }
 
 function RecipeList({ numRecipes, loadMore }) {
