@@ -1,5 +1,6 @@
 ﻿using MealWise.Models;
 using MealWise.Services.Interfaces;
+using MealWiseAPI.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealWise.Controllers;
@@ -14,22 +15,29 @@ public class MealPlanController : ControllerBase
         _mealPlanService = mealPlanService;
     }
     [HttpGet]
-    public async Task<IEnumerable<MealPlan>> GetMealPlans()
+    public async Task<IActionResult> GetMealPlans()
     {
-        return await _mealPlanService.GetMealPlansAsync();
+        var mealPlans = await _mealPlanService.GetMealPlansAsync();
+        return Ok(mealPlans);
     }
     [HttpGet("{id}")]
-    public async Task<MealPlan> GetMealPlanById(int id)
+    public async Task<IActionResult> GetMealPlanById(int id)
     {
-        return await _mealPlanService.GetMealPlanByIdAsync(id);
+        var mealPlan = await _mealPlanService.GetMealPlanByIdAsync(id);
+        if (mealPlan == null)
+        {
+            return NotFound();
+        }
+        return Ok(mealPlan);
     }
     [HttpPost]
-    public async Task<MealPlan> CreateMealPlan([FromBody] MealPlan mealPlan)
+    public async Task<IActionResult> CreateMealPlan([FromBody] MealPlanCreateDTO mealPlanDTO)
     {
-        return await _mealPlanService.CreateMealPlanAsync(mealPlan);
+        var mealPlan = await _mealPlanService.CreateMealPlanAsync(mealPlanDTO);
+        return CreatedAtAction(nameof(GetMealPlanById), new { id = mealPlan.Id }, mealPlan);
     }
     [HttpPut]
-    public async Task<MealPlan> UpdateMealPlan([FromBody] MealPlan mealPlan)
+    public async Task<MealPlanDTO> UpdateMealPlan([FromBody] MealPlan mealPlan)
     {
         return await _mealPlanService.UpdateMealPlanAsync(mealPlan);
     }

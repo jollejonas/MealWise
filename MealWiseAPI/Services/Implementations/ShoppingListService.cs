@@ -32,7 +32,6 @@ public class ShoppingListService : IShoppingListService
 
         var shoppingList = new ShoppingList
         {
-            MealPlanId = mealPlanId,
             Status = ShoppingListStatus.Active,
             CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow),
             UpdatedAt = DateOnly.FromDateTime(DateTime.UtcNow),

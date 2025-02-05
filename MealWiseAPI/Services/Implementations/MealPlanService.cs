@@ -1,6 +1,7 @@
 ﻿using MealWise.Models;
 using MealWise.Repositories.Interfaces;
 using MealWise.Services.Interfaces;
+using MealWiseAPI.DTOs;
 
 
 namespace MealWise.Services.Implementations;
@@ -12,19 +13,19 @@ public class MealPlanService : IMealPlanService
     {
         _mealPlanRepository = mealPlanRepository;
     }
-    public async Task<IEnumerable<MealPlan>> GetMealPlansAsync()
+    public async Task<IEnumerable<MealPlanDTO>> GetMealPlansAsync()
     {
         return await _mealPlanRepository.GetMealPlansAsync();
     }
-    public async Task<MealPlan> GetMealPlanByIdAsync(int id)
+    public async Task<MealPlanDTO> GetMealPlanByIdAsync(int id)
     {
         return await _mealPlanRepository.GetMealPlanByIdAsync(id);
     }
-    public async Task<MealPlan> CreateMealPlanAsync(MealPlan mealPlan)
+    public async Task<MealPlanDTO> CreateMealPlanAsync(MealPlanCreateDTO mealPlanDTO)
     {
-        return await _mealPlanRepository.CreateMealPlanAsync(mealPlan);
+        return await _mealPlanRepository.CreateMealPlanAsync(mealPlanDTO);
     }
-    public async Task<MealPlan> UpdateMealPlanAsync(MealPlan mealPlan)
+    public async Task<MealPlanDTO> UpdateMealPlanAsync(MealPlan mealPlan)
     {
         return await _mealPlanRepository.UpdateMealPlanAsync(mealPlan);
     }

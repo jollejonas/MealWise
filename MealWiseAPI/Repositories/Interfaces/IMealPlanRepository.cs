@@ -1,12 +1,13 @@
 ﻿using MealWise.Models;
+using MealWiseAPI.DTOs;
 
 namespace MealWise.Repositories.Interfaces;
 
 public interface IMealPlanRepository
 {
-    Task<IEnumerable<MealPlan>> GetMealPlansAsync();
-    Task<MealPlan> GetMealPlanByIdAsync(int id);
-    Task<MealPlan> CreateMealPlanAsync(MealPlan mealPlan);
-    Task<MealPlan> UpdateMealPlanAsync(MealPlan mealPlan);
+    Task<IEnumerable<MealPlanDTO>> GetMealPlansAsync();
+    Task<MealPlanDTO> GetMealPlanByIdAsync(int id);
+    Task<MealPlanDTO> CreateMealPlanAsync(MealPlanCreateDTO mealPlanDTO);
+    Task<MealPlanDTO> UpdateMealPlanAsync(MealPlan mealPlan);
     Task DeleteMealPlanAsync(int id);
 }
