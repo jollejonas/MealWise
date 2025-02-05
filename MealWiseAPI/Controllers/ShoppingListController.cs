@@ -23,10 +23,17 @@ public class ShoppingListController : ControllerBase
     {
         return await _shoppingListService.GetShoppingListByIdAsync(id);
     }
-    [HttpPost]
-    public async Task<ShoppingList> CreateShoppingList([FromBody] ShoppingList shoppingList)
+    [HttpPost("{mealPlanId}/shopping-list")]
+    public async Task<IResult> CreateShoppingList(int mealPlanId)
     {
-        return await _shoppingListService.CreateShoppingListAsync(shoppingList);
+        var shoppingList = await _shoppingListService.CreateShoppingListAsync(mealPlanId);
+
+        if (shoppingList == null)
+        {
+            return Results.NotFound("Mealplan not found");
+        }
+
+        return Results.Ok(shoppingList);
     }
     [HttpPut]
     public async Task<ShoppingList> UpdateShoppingList([FromBody] ShoppingList shoppingList)

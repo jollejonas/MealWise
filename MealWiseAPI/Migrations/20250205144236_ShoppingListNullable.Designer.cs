@@ -4,6 +4,7 @@ using MealWise.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MealWiseAPI.Migrations
 {
     [DbContext(typeof(MealWiseContext))]
-    partial class MealWiseContextModelSnapshot : ModelSnapshot
+    [Migration("20250205144236_ShoppingListNullable")]
+    partial class ShoppingListNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -229,8 +232,9 @@ namespace MealWiseAPI.Migrations
                     b.Property<int>("MealPlanId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly>("UpdatedAt")
                         .HasColumnType("date");

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MealWise.Models;
 
@@ -11,10 +11,13 @@ public enum ShoppingListStatus
 public class ShoppingList
 {
     public int Id { get; set; }
-    public int UserId { get; set; }
-    public User User { get; set; }
-    [Required]
-    public string Status { get; set; }
+    [ForeignKey("UserId")]
+    public int? UserId { get; set; }
+    public User? User { get; set; }
+    public string Name { get; set; }
+    public ShoppingListStatus Status { get; set; } = ShoppingListStatus.Active;
     public DateOnly CreatedAt { get; set; }
     public DateOnly UpdatedAt { get; set; }
+
+    public List<ShoppingListItem> Items { get; set; }
 }

@@ -27,6 +27,17 @@ function MealPlanDetails() {
   if (loading) return <p>Loading...</p>;
   if (!mealPlan) return <p>No meal plan found.</p>;
 
+  const createShoppingList = async () => {
+    try {
+      const response = await axios.post(`https://localhost:7104/api/shoppinglists/${id}/shopping-list`);
+      console.log("Shopping list created", response.data);
+      alert("Indkøbsliste oprettet");
+    } catch (error) {
+      console.error("Error creating shopping list", error);
+      alert("Der opstod en fejl. Prøv igen senere.");
+    }
+  };
+
   // Gruppér måltider efter dato
   const mealsByDate = new Map();
   mealPlan.mealPlanRecipes.forEach((meal) => {
@@ -79,6 +90,13 @@ function MealPlanDetails() {
             </div>
           </Col>
         ))}
+      </Row>
+      <Row>
+        <Col className="text-center">
+          <button className="btn btn-primary" onClick={createShoppingList}>
+            Opret indkøbsliste
+          </button>
+        </Col>
       </Row>
     </Container>
   );

@@ -12,9 +12,24 @@ public class ShoppingListRepository : IShoppingListRepository
     {
         _context = context;
     }
+    public async Task<bool> IngredientExistsAsync(int ingredientId)
+    {
+        return await _context.Ingredients.AnyAsync(i => i.Id == ingredientId);
+    }
+
     public async Task<IEnumerable<ShoppingList>> GetShoppingListsAsync()
     {
         return await _context.ShoppingLists.ToListAsync();
+    }
+
+    public async Task<MealPlan?> GetMealPlanWithRecipesAsync(int mealPlanId)
+    {
+        return await _context.MealPlans
+                    .Include(mp => mp.MealPlanRecipes)
+                    .ThenInclude(mpr => mpr.Recipe)
+                    .ThenInclude(ri => ri.RecipeIngredients)
+                    .ThenInclude(ri => ri.Ingredient)
+                    .FirstOrDefaultAsync(mp => mp.Id == mealPlanId);
     }
     public async Task<ShoppingList> GetShoppingListByIdAsync(int id)
     {
