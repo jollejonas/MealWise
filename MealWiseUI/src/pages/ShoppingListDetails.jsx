@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { Container } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -29,9 +29,23 @@ if (!shoppingList) return <p>No shopping list found.</p>;
   return (
     <Container>
       <h1>Indkøbsliste: {shoppingList.name}</h1>
+      <Table>
+        <thead>
+            <tr>
+                <th>Ingrediens</th>
+                <th>Mængde</th>
+            </tr>
+        </thead>
+        <tbody>
       {shoppingList.items.map((item) => 
-        <p key={item.id}>{item.ingredientName} - {item.quantity}{item.unit}</p>
+        <tr key={item.id}>
+            <td>{item.ingredientName}</td>
+            <td>{item.quantity}{item.unit}</td>
+        </tr>
       )}
+      
+      </tbody>
+      </Table>
       <Link to="/indkobslister">Tilbage til indkøbslister</Link>
     </Container>
   );

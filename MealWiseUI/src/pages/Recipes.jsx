@@ -1,13 +1,14 @@
+import { Container, Row } from "react-bootstrap";
 import RecipeList from "../components/Recipes/RecipeList/RecipeList";
 
 function Recipes() {
     return (
-        <div className="container">
+        <Container>
             <h1>Opskrifter</h1>
-            <div className="row">
+            <Row>
                 <RecipeList numRecipes={9} loadMore={true}/>
-            </div>
-        </div>
+            </Row>
+        </Container>
     );
 }
 

@@ -3,7 +3,7 @@ import RecipeCard from '../RecipeCard/RecipeCard';
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from 'prop-types';
-import { Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 
 const fetchRecipes = async () => {
     const response = await axios.get('https://localhost:7104/api/recipes');
@@ -31,7 +31,9 @@ function RecipeList({ numRecipes, loadMore }) {
         <Container>
             <Row>
                 {data.slice(0,numRecipes).map((recipe) => (
-                    <RecipeCard key={recipe.id} recipe={recipe} />
+                    <Col key={recipe.id} md={4} className="mb-4">
+                        <RecipeCard  recipe={recipe} />
+                    </Col>
                 ))}
             </Row>
             {loadMore && <button className='btn btn-primary' onClick={handleLoadMore}>Load more</button>}
