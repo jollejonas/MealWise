@@ -13,7 +13,7 @@ function MainNavbar() {
                     <Nav.Link as={Link} to="/">Home</Nav.Link>
                     <Nav.Link as={Link} to="/opskrifter">Opskrifter</Nav.Link>
                     <Nav.Link as={Link} to="/madplaner">Madplaner</Nav.Link>
-                    <Nav.Link as={Link} to="/indkobsliste">Indkøbsliste</Nav.Link>
+                    <Nav.Link as={Link} to="/indkobslister">Indkøbsliste</Nav.Link>
                     <NavDropdown title="Opret" id="basic-nav-dropdown">
                         <Nav.Link as={Link} to="/opret-opskrift">Opskrift</Nav.Link>
                         <Nav.Link as={Link} to="/opret-madplan">Madplan</Nav.Link>

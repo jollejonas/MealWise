@@ -1,5 +1,6 @@
 ﻿using MealWise.Models;
 using MealWise.Services.Interfaces;
+using MealWiseAPI.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MealWise.Controllers;
@@ -14,26 +15,30 @@ public class ShoppingListController : ControllerBase
         _shoppingListService = shoppingListService;
     }
     [HttpGet]
-    public async Task<IEnumerable<ShoppingList>> GetShoppingLists()
+    public async Task<ActionResult<IEnumerable<ShoppingListDTO>>> GetShoppingLists()
     {
-        return await _shoppingListService.GetShoppingListsAsync();
+        var shoppingLists = await _shoppingListService.GetShoppingListsAsync();
+        return Ok(shoppingLists);
     }
     [HttpGet("{id}")]
-    public async Task<ShoppingList> GetShoppingListById(int id)
+    public async Task<ActionResult<ShoppingListDTO>> GetShoppingListById(int id)
     {
-        return await _shoppingListService.GetShoppingListByIdAsync(id);
-    }
-    [HttpPost("{mealPlanId}/shopping-list")]
-    public async Task<IResult> CreateShoppingList(int mealPlanId)
-    {
-        var shoppingList = await _shoppingListService.CreateShoppingListAsync(mealPlanId);
-
+        var shoppingList = await _shoppingListService.GetShoppingListByIdAsync(id);
         if (shoppingList == null)
         {
-            return Results.NotFound("Mealplan not found");
+            return NotFound();
         }
-
-        return Results.Ok(shoppingList);
+        return Ok(shoppingList);
+    }
+    [HttpPost("create/{mealPlanId}")]
+    public async Task<ActionResult<ShoppingListDTO>> CreateShoppingList(int mealPlanId)
+    {
+        var shoppingList = await _shoppingListService.CreateShoppingListAsync(mealPlanId);
+        if (shoppingList == null)
+        {
+            return NotFound($"Meal plan {mealPlanId} not found.");
+        }
+        return CreatedAtAction(nameof(GetShoppingListById), new { id = shoppingList.Id }, shoppingList);
     }
     [HttpPut]
     public async Task<ShoppingList> UpdateShoppingList([FromBody] ShoppingList shoppingList)

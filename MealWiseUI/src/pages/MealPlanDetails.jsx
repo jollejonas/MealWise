@@ -29,7 +29,7 @@ function MealPlanDetails() {
 
   const createShoppingList = async () => {
     try {
-      const response = await axios.post(`https://localhost:7104/api/shoppinglists/${id}/shopping-list`);
+      const response = await axios.post(`https://localhost:7104/api/shoppinglists/create/${id}`);
       console.log("Shopping list created", response.data);
       alert("Indkøbsliste oprettet");
     } catch (error) {

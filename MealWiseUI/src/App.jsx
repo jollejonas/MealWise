@@ -8,6 +8,8 @@ import CreateRecipe from './pages/CreateRecipes.jsx'
 import CreateMealPlan from './pages/CreateMealPlan.jsx'
 import MealPlanDetails from './pages/MealPlanDetails.jsx'
 import MealPlans from './pages/MealPlans.jsx'
+import ShoppingLists from './pages/ShoppingLists.jsx'
+import ShoppingListDetails from './pages/ShoppingListDetails.jsx'
 
 function App() {
 
@@ -23,6 +25,8 @@ function App() {
         <Route path="/madplaner" element={<MealPlans />} />
         <Route path="/opret-madplan" element={<CreateMealPlan />} />
         <Route path="/madplan/:id" element={<MealPlanDetails />} />
+        <Route path="/indkobslister" element={<ShoppingLists />} />
+        <Route path="/indkobsliste/:id" element={<ShoppingListDetails />} />
         </Routes>
       </Router>
     </div>
