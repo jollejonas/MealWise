@@ -2,7 +2,7 @@ import MealPlanRow from '../MealPlanRow/MealPlanRow';
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from 'prop-types';
-import { Container} from 'react-bootstrap';
+import { Container, Table} from 'react-bootstrap';
 
 const fetchMealPlans = async () => {
     const response = await axios.get('https://localhost:7104/api/mealplans');
@@ -28,9 +28,21 @@ function MealPlanList({ numMealPlans, loadMore }) {
     
     return (
         <Container>
+            <Table>
+                <thead>
+                    <tr>
+                        <th>Navn</th>
+                        <th>Startdato</th>
+                        <th>Slutdato</th>
+                        <th>Slet</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {data.slice(0,numMealPlans).map((mealPlan) => (
                     <MealPlanRow key={mealPlan.id} mealPlan={mealPlan} />
                 ))}
+            </tbody>
+            </Table>
             {loadMore && <button className='btn btn-primary' onClick={handleLoadMore}>Load more</button>}
         </Container>
     );
