@@ -10,11 +10,12 @@ import MealPlanDetails from './pages/MealPlanDetails.jsx'
 import MealPlans from './pages/MealPlans.jsx'
 import ShoppingLists from './pages/ShoppingLists.jsx'
 import ShoppingListDetails from './pages/ShoppingListDetails.jsx'
+import { Container } from 'react-bootstrap'
 
 function App() {
 
   return (
-    <div className="container-fluid">
+    <Container fluid className="m-0">
     <Router>
       <MainNavbar />
         <Routes>
@@ -29,7 +30,7 @@ function App() {
         <Route path="/indkobsliste/:id" element={<ShoppingListDetails />} />
         </Routes>
       </Router>
-    </div>
+    </Container>
   )
 }
 

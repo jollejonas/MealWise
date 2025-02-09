@@ -1,12 +1,29 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Row } from 'react-bootstrap';
+import axios from 'axios';
 
 function ShoppingListRow({ shoppingList }) {
+
+    const handleRowClick = () => {
+        window.location.href = `/indkobsliste/${shoppingList.id}`;
+    }
+    const handleDeleteShoppingList = async (event) => {
+        event.stopPropagation();
+        try {
+            const response = await axios.delete(`https://localhost:7104/api/shoppinglists/${shoppingList.id}`);
+            console.log("Shopping list deleted", response.data);
+            alert("Indkøbsliste slettet");
+            window.location.reload();
+        } catch (error) {
+            console.error("Error deleting shopping list", error);
+            alert("Der opstod en fejl. Prøv igen senere.");            
+        }
+    }
+
     return (
-        <Row>
-            <Link to={`/indkobsliste/${shoppingList.id}`}> <p>Navn: {shoppingList.name} </p></Link>
-        </Row>
+            <tr onClick={handleRowClick} style={{ cursor: 'pointer' }}>
+                <td>{shoppingList.name}</td>
+                <td><button onClick={handleDeleteShoppingList} className="btn btn-danger">Slet</button></td>
+            </tr>
     )
 }
 

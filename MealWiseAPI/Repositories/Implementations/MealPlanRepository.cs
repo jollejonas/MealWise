@@ -25,6 +25,7 @@ public class MealPlanRepository : IMealPlanRepository
                 EndDate = mp.EndDate,
                 MealPlanRecipes = mp.MealPlanRecipes.Select(mpr => new MealPlanRecipeDTO
                 {
+                    RecipeId = mpr.Recipe.Id,
                     Recipe = new RecipeDTO
                     {
                         Id = mpr.Recipe.Id,
@@ -83,6 +84,8 @@ public class MealPlanRepository : IMealPlanRepository
                 Date = mpr.Date,
                 MealType = mpr.MealType,
                 ServingsOverride = mpr.ServingsOverride,
+                Recipe = _context.Recipes.FirstOrDefault(r => r.Id == mpr.RecipeId)
+                    ?? throw new ArgumentException($"Recipe with ID {mpr.RecipeId} not found.")
             }).ToList()
         };
 

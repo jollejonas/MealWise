@@ -1,4 +1,4 @@
-import { Container, Form, Button } from 'react-bootstrap';
+import { Container, Form, Button, Col, Row } from 'react-bootstrap';
 import { DndContext } from '@dnd-kit/core';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -120,28 +120,40 @@ function CreateMealPlan() {
         }
     };
 
+    const handleRemoveMeal = (recipeId, mealType, date) => {
+        setMealPlan((prev) => ({
+            ...prev,
+            mealPlanRecipes: prev.mealPlanRecipes.filter(
+                (meal) =>
+                    meal.recipeId !== recipeId ||
+                    meal.mealType !== mealType ||
+                    meal.date !== date
+            )
+        }))
+    };
+
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Something went wrong: {error.message}</p>;
 
     return (
-        <Container>
+        <Container fluid className="mx-auto">
             <div>
                 <h4>Vælg startdato:</h4>
                 <Form.Control type="date" value={format(startDate, "yyyy-MM-dd")} onChange={handleDateChange} />
             </div>
 
             <DndContext onDragEnd={handleDragEnd}>
-                <div style={{ display: 'flex' }}>
+                <Container fluid className="d-flex m-auto">
+                <Row className="row-cols-8 g-2">
                     {/* Favoritopskrifter */}
-                    <div style={{ width: '200px', marginRight: '20px' }}>
+                    <Col>
                         <h3>Favoritter</h3>
                         {data?.map((recipe) => (
                             <DraggableRecipe key={recipe.id} recipeId={recipe.id} name={recipe.title} />
                         ))}
-                    </div>
+                    </Col>
 
                     {/* Madplan Grid */}
-                    <div style={{ flexGrow: 1, display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '10px' }}>
                         {Array.from({ length: 7 }, (_, i) => {
                             const date = format(addDays(
                                 typeof startDate === 'string' ? parseISO(startDate) : startDate, 
@@ -150,17 +162,19 @@ function CreateMealPlan() {
                             const displayDate = formatToDanishDate(parseISO(date));
 
                             return (
-                            <DailyPlan 
-                            key={date} 
-                            day={displayDate}
-                            mealPlanRecipes={mealPlan.mealPlanRecipes.filter(m => m.date === date)} 
-                            recipes={data || []} 
-                            />
+                            <Col key={date}>
+                                <DailyPlan 
+                                day={displayDate}
+                                mealPlanRecipes={mealPlan.mealPlanRecipes.filter(m => m.date === date)} 
+                                recipes={data || []} 
+                                onRemoveMeal={handleRemoveMeal}
+                                />
+                            </Col>
                         );
                         })}
 
-                    </div>
-                </div>
+                    </Row>
+                </Container>
             </DndContext>
 
             <Button onClick={handleSaveMealPlan}>Gem måltidsplan</Button>

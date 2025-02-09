@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import PropTypes from 'prop-types';
-import { Container} from 'react-bootstrap';
+import { Container, Table} from 'react-bootstrap';
 import ShoppingListRow from '../ShoppingListRow/ShoppingListRow';
 
 const fetchShoppingLists = async () => {
@@ -24,9 +24,19 @@ function ShoppingListOverview() {
     
     return (
         <Container>
+            <Table>
+                <thead>
+                    <tr>
+                        <th>Navn</th>
+                        <th>Slet</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {data.map((shoppingList) => (
                     <ShoppingListRow key={shoppingList.id} shoppingList={shoppingList} />
                 ))}
+                </tbody>
+            </Table>
         </Container>
     );
 }
