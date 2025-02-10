@@ -7,7 +7,7 @@ function MealPlanRow({ mealPlan }) {
     };
 
     const handleDeleteMealPlan = async (event) => {
-        event.stopProppagation();
+        event.stopPropagation();
         try {
             const response = await axios.delete(`https://localhost:7104/api/mealplans/${mealPlan.id}`);
             console.log("Meal plan deleted", response.data);

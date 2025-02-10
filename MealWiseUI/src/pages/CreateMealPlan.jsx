@@ -1,9 +1,8 @@
 import { Container, Form, Button, Col, Row } from 'react-bootstrap';
 import { DndContext } from '@dnd-kit/core';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import DailyPlan from '../components/MealPlans/DailyPlan/DailyPlan';
-import DraggableRecipe from '../components/MealPlans/DraggableRecipe/DraggableRecipe';
 import axios from 'axios';
 import { format, addDays, parseISO, isValid, parse } from 'date-fns';
 
@@ -20,7 +19,6 @@ const formatToDanishDate = (date) => format(date, 'dd-MM-yyyy');
 // Hent opskrifter fra API
 const fetchRecipes = async () => {
     const response = await axios.get('https://localhost:7104/api/recipes');
-    console.log('API response:', response.data);
 
     const recipes = response.data || response.data;
     return recipes.map((recipe) => ({
@@ -81,7 +79,6 @@ function CreateMealPlan() {
         const recipeId = parseInt(active.id.split('-')[1], 10);
 
         const date = format(parse(displayDate, 'dd-MM-yyyy', new Date()), 'yyyy-MM-dd');
-        console.log(displayDate, date, mealType);
         
         setMealPlan((prev) => ({
             ...prev,
@@ -96,7 +93,22 @@ function CreateMealPlan() {
             ],
         }));
     };
-    // Gem madplan til API
+    
+    const handleAddMeal = (date, mealType, recipeId) => {
+        setMealPlan((prev) => ({
+            ...prev,
+            mealPlanRecipes: [
+                ...prev.mealPlanRecipes,
+                {
+                    date,
+                    mealType: mealTypeEnum[mealType],
+                    recipeId,
+                    servingsOverride: 1,
+                },
+            ],
+        }));
+    };
+
     const handleSaveMealPlan = async () => {
         const endDate = format(addDays(parseISO(startDate), 6), 'yyyy-MM-dd');
 
@@ -109,28 +121,33 @@ function CreateMealPlan() {
                 mealPlanRecipes: mealPlan.mealPlanRecipes.map((meal) => ({
                     mealPlanId: mealPlan.id,
                     date: meal.date,
-                    mealType: mealTypeEnum[meal.mealType],
+                    mealType: typeof meal.mealType === "string" ? mealTypeEnum[meal.mealType] : meal.mealType,
                     recipeId: meal.recipeId,
                     servingsOverride: meal.servingsOverride,
                 })),
             });
-            console.log('Meal plan saved:', response.data);
+            alert('Meal plan saved:', response.data);
         } catch (error) {
-            console.error('Failed to save meal plan:', error);
+            alert('Failed to save meal plan:', error);
         }
     };
 
     const handleRemoveMeal = (recipeId, mealType, date) => {
+        const mealTypeValue = mealTypeEnum[mealType.toLowerCase()]; // Konverter til tal
         setMealPlan((prev) => ({
             ...prev,
             mealPlanRecipes: prev.mealPlanRecipes.filter(
                 (meal) =>
                     meal.recipeId !== recipeId ||
-                    meal.mealType !== mealType ||
+                    meal.mealType !== mealTypeValue || // Sammenlign talværdi
                     meal.date !== date
-            )
-        }))
+            ),
+        }));
     };
+
+    useEffect(() => {
+        console.log("Opdateret mealPlan:", mealPlan);
+    }, [mealPlan]);
 
     if (isLoading) return <p>Loading...</p>;
     if (error) return <p>Something went wrong: {error.message}</p>;
@@ -143,15 +160,8 @@ function CreateMealPlan() {
             </div>
 
             <DndContext onDragEnd={handleDragEnd}>
-                <Container fluid className="d-flex m-auto">
+                <Container fluid className="m-auto">
                 <Row className="row-cols-8 g-2">
-                    {/* Favoritopskrifter */}
-                    <Col>
-                        <h3>Favoritter</h3>
-                        {data?.map((recipe) => (
-                            <DraggableRecipe key={recipe.id} recipeId={recipe.id} name={recipe.title} />
-                        ))}
-                    </Col>
 
                     {/* Madplan Grid */}
                         {Array.from({ length: 7 }, (_, i) => {
@@ -159,15 +169,16 @@ function CreateMealPlan() {
                                 typeof startDate === 'string' ? parseISO(startDate) : startDate, 
                                 i
                             ), 'yyyy-MM-dd');
-                            const displayDate = formatToDanishDate(parseISO(date));
+                            console.log(date)
 
                             return (
                             <Col key={date}>
                                 <DailyPlan 
-                                day={displayDate}
+                                date={date}
                                 mealPlanRecipes={mealPlan.mealPlanRecipes.filter(m => m.date === date)} 
                                 recipes={data || []} 
                                 onRemoveMeal={handleRemoveMeal}
+                                onAddMeal={handleAddMeal}
                                 />
                             </Col>
                         );

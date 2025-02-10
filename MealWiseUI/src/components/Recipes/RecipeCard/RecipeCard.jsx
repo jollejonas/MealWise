@@ -6,7 +6,7 @@ import { Col } from 'react-bootstrap';
 
 function RecipeCard({ recipe }) {
     if (recipe.imageUrl === null || recipe.imageUrl === "") {
-        recipe.imageUrl = "https://fastly.picsum.photos/id/220/500/300.jpg?hmac=HVBg4X-ejEAUICcGyVo8L34MiRIAOWnfVqkXmr-W9e0";
+        recipe.imageUrl = "https://picsum.photos/seed/food/500/300";
     } else if (!recipe.imageUrl.startsWith("http")) {
         recipe.imageUrl = ("https://localhost:7104/" + recipe.imageUrl);
     }

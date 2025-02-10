@@ -55,8 +55,13 @@ function DynamicIngredients({ ingredients, setIngredients }) {
               <option value="g">g</option>
               <option value="kg">kg</option>
               <option value="ml">ml</option>
+              <option value="dl">dl</option>
               <option value="l">l</option>
               <option value="stk">stk</option>
+              <option value="tsk">tsk</option>
+              <option value="spsk">spsk</option>
+              <option value="fed">fed</option>
+              <option value="efter behov">efter behov</option>
             </Form.Select>
           </Col>
 

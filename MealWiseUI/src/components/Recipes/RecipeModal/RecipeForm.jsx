@@ -172,8 +172,6 @@ const RecipeForm = () => {
 };
 
 RecipeForm.propTypes = {
-    show: PropTypes.bool.isRequired,
-    handleClose: PropTypes.func.isRequired,
     handleSave: PropTypes.func.isRequired,
 };
 
