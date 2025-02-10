@@ -1,7 +1,7 @@
-﻿using MealWise.Models;
-using MealWiseAPI.DTOs;
+﻿using MealWiseAPI.DTOs;
+using MealWiseAPI.Models;
 
-namespace MealWise.Services.Interfaces;
+namespace MealWiseAPI.Services.Interfaces;
 
 public interface IShoppingListService
 {

@@ -1,9 +1,9 @@
-﻿using MealWise.Models;
-using MealWise.Services.Interfaces;
-using MealWiseAPI.DTOs;
+﻿using MealWiseAPI.DTOs;
+using MealWiseAPI.Models;
+using MealWiseAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MealWise.Controllers;
+namespace MealWiseAPI.Controllers;
 
 [ApiController]
 [Route("api/shoppinglists")]

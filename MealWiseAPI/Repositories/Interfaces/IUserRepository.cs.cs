@@ -1,6 +1,6 @@
-﻿using MealWise.Models;
+﻿using MealWiseAPI.Models;
 
-namespace MealWise.Repositories.Interfaces;
+namespace MealWiseAPI.Repositories.Interfaces;
 
 public interface IUserRepository
 {

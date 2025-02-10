@@ -1,8 +1,8 @@
-using MealWise.Data;
-using MealWise.Repositories.Implementations;
-using MealWise.Repositories.Interfaces;
-using MealWise.Services.Implementations;
-using MealWise.Services.Interfaces;
+using MealWiseAPI.Data;
+using MealWiseAPI.Repositories.Implementations;
+using MealWiseAPI.Repositories.Interfaces;
+using MealWiseAPI.Services.Implementations;
+using MealWiseAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -47,7 +47,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "MealWise API v1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "MealWiseAPI API v1");
         options.RoutePrefix = string.Empty; // Gør Swagger UI til roden af URL'en
     });
 }

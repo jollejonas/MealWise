@@ -1,10 +1,10 @@
-﻿using MealWise.Data;
-using MealWise.Models;
-using MealWise.Repositories.Interfaces;
+﻿using MealWiseAPI.Data;
 using MealWiseAPI.DTOs;
+using MealWiseAPI.Models;
+using MealWiseAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace MealWise.Repositories.Implementations;
+namespace MealWiseAPI.Repositories.Implementations;
 
 public class ShoppingListRepository : IShoppingListRepository
 {
@@ -55,8 +55,9 @@ public class ShoppingListRepository : IShoppingListRepository
         var mealPlan = await _context.MealPlans
             .Include(mp => mp.MealPlanRecipes)
                 .ThenInclude(mpr => mpr.Recipe)
-                    .ThenInclude(r => r.RecipeIngredients)
-                        .ThenInclude(ri => ri.Ingredient)
+                    .ThenInclude(r => r.IngredientGroups)
+                        .ThenInclude(ig => ig.IngredientGroupIngredients)
+                            .ThenInclude(igi => igi.Ingredient)
             .FirstOrDefaultAsync(mp => mp.Id == mealPlanId);
 
         if (mealPlan == null)
@@ -77,30 +78,33 @@ public class ShoppingListRepository : IShoppingListRepository
 
         foreach (var mealRecipe in mealPlan.MealPlanRecipes)
         {
-            foreach (var ingredient in mealRecipe.Recipe.RecipeIngredients)
+            foreach (var ingredientGroup in mealRecipe.Recipe.IngredientGroups)
             {
-                if (ingredient.Ingredient == null)
+                foreach (var ingredient in ingredientGroup.IngredientGroupIngredients)
                 {
-                    continue;
-                }
+                    if (ingredient.Ingredient == null)
+                    {
+                        continue;
+                    }
 
-                var exists = await IngredientExistsAsync(ingredient.IngredientId);
-                if (!exists)
-                {
-                    Console.WriteLine($"⚠️ Advarsel: IngredientId {ingredient.IngredientId} findes ikke i databasen.");
-                    continue;
-                }
+                    var exists = await IngredientExistsAsync(ingredient.IngredientId);
+                    if (!exists)
+                    {
+                        Console.WriteLine($"⚠️ Advarsel: IngredientId {ingredient.IngredientId} findes ikke i databasen.");
+                        continue;
+                    }
 
-                if (ingredientDict.ContainsKey(ingredient.IngredientId))
-                {
-                    ingredientDict[ingredient.IngredientId] = (
-                        ingredientDict[ingredient.IngredientId].Quantity + ingredient.Quantity,
-                        ingredient.UnitOverride ?? ingredient.Ingredient.UnitType
-                    );
-                }
-                else
-                {
-                    ingredientDict[ingredient.IngredientId] = (ingredient.Quantity, ingredient.UnitOverride ?? ingredient.Ingredient.UnitType);
+                    if (ingredientDict.ContainsKey(ingredient.IngredientId))
+                    {
+                        ingredientDict[ingredient.IngredientId] = (
+                            ingredientDict[ingredient.IngredientId].Quantity + ingredient.Quantity,
+                            ingredient.UnitOverride ?? ingredient.Ingredient.UnitType
+                        );
+                    }
+                    else
+                    {
+                        ingredientDict[ingredient.IngredientId] = (ingredient.Quantity, ingredient.UnitOverride ?? ingredient.Ingredient.UnitType);
+                    }
                 }
             }
         }

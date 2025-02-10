@@ -1,6 +1,6 @@
-﻿using MealWise.Models;
+﻿using MealWiseAPI.Models;
 
-namespace MealWise.Services.Interfaces;
+namespace MealWiseAPI.Services.Interfaces;
 
 public interface IRecipeService
 {

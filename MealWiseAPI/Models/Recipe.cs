@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MealWise.Models;
+namespace MealWiseAPI.Models;
 
 public class Recipe
 {
@@ -14,8 +14,6 @@ public class Recipe
     public int PrepTime { get; set; }
     [Range(0, 15000)]
     public int CookTime { get; set; }
-    [MaxLength(500)]
-    public string Instructions { get; set; }
     [Required]
     [Range(0, 1000)]
     public int Servings { get; set; }
@@ -24,6 +22,7 @@ public class Recipe
     public User? User { get; set; }
     public DateOnly CreatedAt { get; set; }
     public DateOnly UpdatedAt { get; set; }
-    public ICollection<RecipeIngredient> RecipeIngredients { get; set; }
+    public ICollection<IngredientGroup> IngredientGroups { get; set; } = new List<IngredientGroup>();
+    public ICollection<RecipeStep> Steps { get; set; } = new List<RecipeStep>();
 
 }

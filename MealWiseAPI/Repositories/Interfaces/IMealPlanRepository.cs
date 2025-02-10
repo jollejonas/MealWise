@@ -1,7 +1,7 @@
-﻿using MealWise.Models;
-using MealWiseAPI.DTOs;
+﻿using MealWiseAPI.DTOs;
+using MealWiseAPI.Models;
 
-namespace MealWise.Repositories.Interfaces;
+namespace MealWiseAPI.Repositories.Interfaces;
 
 public interface IMealPlanRepository
 {

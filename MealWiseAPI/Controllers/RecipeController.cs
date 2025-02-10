@@ -1,8 +1,8 @@
-﻿using MealWise.Models;
-using MealWise.Services.Interfaces;
+﻿using MealWiseAPI.Models;
+using MealWiseAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MealWise.Controllers;
+namespace MealWiseAPI.Controllers;
 
 [ApiController]
 [Route("api/recipes")]

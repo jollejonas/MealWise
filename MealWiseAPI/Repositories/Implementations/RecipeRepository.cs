@@ -1,9 +1,9 @@
-﻿using MealWise.Data;
-using MealWise.Models;
-using MealWise.Repositories.Interfaces;
+﻿using MealWiseAPI.Data;
+using MealWiseAPI.Models;
+using MealWiseAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace MealWise.Repositories.Implementations;
+namespace MealWiseAPI.Repositories.Implementations;
 
 public class RecipeRepository : IRecipeRepository
 {
@@ -15,15 +15,17 @@ public class RecipeRepository : IRecipeRepository
     public async Task<IEnumerable<Recipe>> GetRecipesAsync()
     {
         return await _context.Recipes.
-            Include(r => r.RecipeIngredients)
-                .ThenInclude(ri => ri.Ingredient)
+            Include(r => r.IngredientGroups)
+                .ThenInclude(ri => ri.IngredientGroupIngredients)
+                .ThenInclude(igi => igi.Ingredient)
             .ToListAsync();
     }
     public async Task<Recipe> GetRecipeByIdAsync(int id)
     {
         return await _context.Recipes
-            .Include(r => r.RecipeIngredients)
-                .ThenInclude(ri => ri.Ingredient)
+            .Include(r => r.IngredientGroups)
+                .ThenInclude(ri => ri.IngredientGroupIngredients)
+                .ThenInclude(igi => igi.Ingredient)
             .FirstOrDefaultAsync(r => r.Id == id);
     }
     public async Task<Recipe> CreateRecipeAsync(Recipe recipe)

@@ -1,9 +1,9 @@
-﻿using MealWise.Models;
-using MealWise.Repositories.Interfaces;
-using MealWise.Services.Interfaces;
+﻿using MealWiseAPI.Models;
+using MealWiseAPI.Repositories.Interfaces;
+using MealWiseAPI.Services.Interfaces;
 
 
-namespace MealWise.Services.Implementations;
+namespace MealWiseAPI.Services.Implementations;
 
 public class IngredientService : IIngredientService
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MealWise.Models;
+namespace MealWiseAPI.Models;
 
 public class User
 {

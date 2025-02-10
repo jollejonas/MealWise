@@ -1,10 +1,10 @@
-﻿using MealWise.Data;
-using MealWise.Models;
-using MealWise.Repositories.Interfaces;
+﻿using MealWiseAPI.Data;
 using MealWiseAPI.DTOs;
+using MealWiseAPI.Models;
+using MealWiseAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace MealWise.Repositories.Implementations;
+namespace MealWiseAPI.Repositories.Implementations;
 
 public class MealPlanRepository : IMealPlanRepository
 {

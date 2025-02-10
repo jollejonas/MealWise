@@ -1,9 +1,9 @@
-﻿using MealWise.Models;
-using MealWise.Repositories.Interfaces;
-using MealWise.Services.Interfaces;
+﻿using MealWiseAPI.Models;
+using MealWiseAPI.Repositories.Interfaces;
+using MealWiseAPI.Services.Interfaces;
 
 
-namespace MealWise.Services.Implementations;
+namespace MealWiseAPI.Services.Implementations;
 
 public class RecipeService : IRecipeService
 {
@@ -24,20 +24,20 @@ public class RecipeService : IRecipeService
     }
     public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
     {
-        foreach (var recipeIngredient in recipe.RecipeIngredients)
+        foreach (var ingredientGroup in recipe.IngredientGroups)
         {
-            if (recipeIngredient.Ingredient == null)
+            foreach (var ingredient in ingredientGroup.IngredientGroupIngredients)
             {
-                throw new ArgumentNullException(nameof(recipeIngredient.Ingredient), "Ingredient cannot be null");
+                if (ingredient.Ingredient == null)
+                {
+                    throw new ArgumentNullException(nameof(ingredient.Ingredient), "Ingredient cannot be null");
+                }
+                var newIngredient = await _ingredientService.GetOrCreateIngredientAsync(
+                    ingredient.Ingredient.Name,
+                    ingredient.Ingredient.UnitType ?? ingredient.UnitOverride
+                );
+                ingredient.IngredientId = newIngredient.Id;
             }
-
-            var ingredient = await _ingredientService.GetOrCreateIngredientAsync(
-                recipeIngredient.Ingredient.Name,
-                recipeIngredient.Ingredient.UnitType ?? recipeIngredient.UnitOverride
-            );
-
-            recipeIngredient.IngredientId = ingredient.Id;
-            recipeIngredient.RecipeId = recipe.Id;
         }
 
         recipe.CreatedAt = DateOnly.FromDateTime(DateTime.Now);

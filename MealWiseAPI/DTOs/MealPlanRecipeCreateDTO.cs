@@ -1,4 +1,4 @@
-﻿using MealWise.Models;
+﻿using MealWiseAPI.Models;
 
 namespace MealWiseAPI.DTOs;
 
