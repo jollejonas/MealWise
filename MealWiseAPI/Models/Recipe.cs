@@ -23,6 +23,5 @@ public class Recipe
     public DateOnly CreatedAt { get; set; }
     public DateOnly UpdatedAt { get; set; }
     public ICollection<IngredientGroup> IngredientGroups { get; set; } = new List<IngredientGroup>();
-    public ICollection<RecipeStep> Steps { get; set; } = new List<RecipeStep>();
 
 }
