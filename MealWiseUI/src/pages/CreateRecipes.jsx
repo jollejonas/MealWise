@@ -1,4 +1,4 @@
-import RecipeForm from '../components/Recipes/RecipeModal/RecipeForm';
+import RecipeForm from '../components/Recipes/RecipeForm/RecipeForm';
 import { Container } from 'react-bootstrap';
 
 function CreateRecipe() {

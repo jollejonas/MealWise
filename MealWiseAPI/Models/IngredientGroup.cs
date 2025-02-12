@@ -10,4 +10,5 @@ public class IngredientGroup
     public int RecipeId { get; set; }
     public Recipe Recipe { get; set; }
     public ICollection<IngredientGroupIngredient> IngredientGroupIngredients { get; set; } = new List<IngredientGroupIngredient>();
+    public ICollection<RecipeStep> Steps { get; set; } = new List<RecipeStep>();
 }
