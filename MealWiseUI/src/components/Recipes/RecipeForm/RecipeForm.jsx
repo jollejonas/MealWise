@@ -8,7 +8,7 @@ const RecipeForm = () => {
     const [servings, setServings] = useState(0);
     const [prepTime, setPrepTime] = useState(0);
     const [cookTime, setCookTime] = useState(0);
-    const [ingredientGroups, setIngredientGroups] = useState([{ name: '', ingredients: [{ name: '', quantity: '', unit: '' }], steps: [''] }]);
+    const [ingredientGroups, setIngredientGroups] = useState([{ name: '', ingredients: [{ name: '', quantity: '', unit: '' }], steps: [{ instruction: '' }] }]);
     const [image, setImage] = useState(null);
 
     const handleSave = async (newRecipe) => {
@@ -229,7 +229,7 @@ const RecipeForm = () => {
                                                         <Row key={stepIndex} className="mt-2">
                                                             <Col>
                                                                 <h5>{stepIndex + 1}</h5>
-                                                                <Form.Control as="textarea" rows={2} value={step} onChange={(e) => {
+                                                                <Form.Control as="textarea" rows={2} value={step.instruction} onChange={(e) => {
                                                                     const newGroups = [...ingredientGroups];
                                                                     newGroups[index].steps[stepIndex].instruction = e.target.value;
                                                                     setIngredientGroups(newGroups);
@@ -242,7 +242,7 @@ const RecipeForm = () => {
                                                     ))}
                                                     <Button variant="secondary" onClick={() => {
                                                         const newGroups = [...ingredientGroups];
-                                                        newGroups[index].steps.push('');
+                                                        newGroups[index].steps.push({ instruction: '' });
                                                         setIngredientGroups(newGroups);
                                                     }}>Tilføj trin</Button>
                                                 </Accordion.Body>
@@ -253,7 +253,7 @@ const RecipeForm = () => {
                             ))}
                             
                         </Accordion>
-                            <Button variant="secondary" className="mt-3" onClick={() => setIngredientGroups([...ingredientGroups, { name: '', ingredients: [{ name: "", quantity: "", unitOverride: ""}], steps: [""] }])}>Tilføj gruppe</Button>
+                            <Button variant="secondary" className="mt-3" onClick={() => setIngredientGroups([...ingredientGroups, { name: '', ingredients: [{ name: "", quantity: "", unitOverride: ""}], steps: [{ instruction: "" }] }])}>Tilføj gruppe</Button>
                         </Tab>
                     </Tabs>
                 <Button variant="primary" onClick={onSave}>
