@@ -8,7 +8,6 @@ const RecipeForm = () => {
     const [servings, setServings] = useState(0);
     const [prepTime, setPrepTime] = useState(0);
     const [cookTime, setCookTime] = useState(0);
-    const [steps, setSteps] = useState(['']);
     const [ingredientGroups, setIngredientGroups] = useState([{ name: '', ingredients: [{ name: '', quantity: '', unit: '' }], steps: [''] }]);
     const [image, setImage] = useState(null);
 
@@ -52,14 +51,14 @@ const RecipeForm = () => {
                 prepTime: parseInt(prepTime),
                 cookTime: parseInt(cookTime),
                 imageUrl: finalImageUrl,
-                ingredientGroups: ingredientGroups.map(group => ({ 
+                ingredientGroup: ingredientGroups.map(group => ({ 
                     name: group.name,
                     ingredientGroupIngredients: group.ingredients.map(ingredient => ({
                         name: ingredient.name,
                         quantity: parseFloat(ingredient.quantity),
                         unitOverride: ingredient.unitOverride
                 })),
-                steps: steps.map((instruction, index) => ({stepNumber: index + 1, instruction }))
+                steps: group.steps.map((instruction, index) => ({stepNumber: index + 1, instruction }))
             }))
         };
         handleSave(newRecipe);
@@ -229,6 +228,7 @@ const RecipeForm = () => {
                                                     {group.steps.map((step, stepIndex) => (
                                                         <Row key={stepIndex} className="mt-2">
                                                             <Col>
+                                                                <h5>{stepIndex + 1}</h5>
                                                                 <Form.Control as="textarea" rows={2} value={step} onChange={(e) => {
                                                                     const newGroups = [...ingredientGroups];
                                                                     newGroups[index].steps[stepIndex].instruction = e.target.value;
@@ -240,7 +240,11 @@ const RecipeForm = () => {
                                                             </Col>
                                                             </Row>
                                                     ))}
-                                                    <Button variant="secondary" onClick={() => setSteps([...steps, ''])}>Tilføj trin</Button>
+                                                    <Button variant="secondary" onClick={() => {
+                                                        const newGroups = [...ingredientGroups];
+                                                        newGroups[index].steps.push('');
+                                                        setIngredientGroups(newGroups);
+                                                    }}>Tilføj trin</Button>
                                                 </Accordion.Body>
                                             </Accordion.Item>
                                         </Accordion>
