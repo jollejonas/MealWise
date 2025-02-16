@@ -162,27 +162,6 @@ namespace MealWiseAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RecipeSteps",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StepNumber = table.Column<int>(type: "int", nullable: false),
-                    Instruction = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RecipeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RecipeSteps", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RecipeSteps_Recipes_RecipeId",
-                        column: x => x.RecipeId,
-                        principalTable: "Recipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ShoppingListItem",
                 columns: table => new
                 {
@@ -241,6 +220,27 @@ namespace MealWiseAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RecipeSteps",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StepNumber = table.Column<int>(type: "int", nullable: false),
+                    Instruction = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IngredientGroupId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeSteps", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RecipeSteps_IngredientGroups_IngredientGroupId",
+                        column: x => x.IngredientGroupId,
+                        principalTable: "IngredientGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_IngredientGroupIngredients_IngredientGroupId",
                 table: "IngredientGroupIngredients",
@@ -277,9 +277,9 @@ namespace MealWiseAPI.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecipeSteps_RecipeId",
+                name: "IX_RecipeSteps_IngredientGroupId",
                 table: "RecipeSteps",
-                column: "RecipeId");
+                column: "IngredientGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ShoppingListItem_IngredientId",
@@ -313,10 +313,10 @@ namespace MealWiseAPI.Migrations
                 name: "ShoppingListItem");
 
             migrationBuilder.DropTable(
-                name: "IngredientGroups");
+                name: "MealPlans");
 
             migrationBuilder.DropTable(
-                name: "MealPlans");
+                name: "IngredientGroups");
 
             migrationBuilder.DropTable(
                 name: "Ingredients");

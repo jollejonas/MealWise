@@ -24,26 +24,45 @@ public class RecipeService : IRecipeService
     }
     public async Task<Recipe> CreateRecipeAsync(Recipe recipe)
     {
-        foreach (var ingredientGroup in recipe.IngredientGroups)
-        {
-            foreach (var ingredient in ingredientGroup.IngredientGroupIngredients)
-            {
-                if (ingredient.Ingredient == null)
-                {
-                    throw new ArgumentNullException(nameof(ingredient.Ingredient), "Ingredient cannot be null");
-                }
-                var newIngredient = await _ingredientService.GetOrCreateIngredientAsync(
-                    ingredient.Ingredient.Name,
-                    ingredient.Ingredient.UnitType ?? ingredient.UnitOverride
-                );
-                ingredient.IngredientId = newIngredient.Id;
-            }
-        }
-
         recipe.CreatedAt = DateOnly.FromDateTime(DateTime.Now);
         recipe.UpdatedAt = DateOnly.FromDateTime(DateTime.Now);
 
-        await _recipeRepository.CreateRecipeAsync(recipe);
+        recipe = await _recipeRepository.CreateRecipeAsync(recipe);
+
+        foreach (var ingredientGroup in recipe.IngredientGroups)
+        {
+            ingredientGroup.Id = 0;
+            ingredientGroup.RecipeId = recipe.Id;
+
+            foreach (var ingredient in ingredientGroup.IngredientGroupIngredients)
+            {
+                if (!string.IsNullOrWhiteSpace(ingredient.Ingredient.Name))
+                {
+                    var existingIngredient = await _ingredientService.GetOrCreateIngredientAsync(ingredient.Ingredient.Name, ingredient.Ingredient.UnitType);
+
+                    ingredient.IngredientId = existingIngredient.Id;
+                    ingredient.Ingredient = existingIngredient;
+                }
+
+                if (ingredient.Ingredient == null)
+                {
+                    throw new ArgumentException($"Ingredient is missing for IngredientId {ingredient.IngredientId}");
+                }
+            }
+        }
+
+        await _recipeRepository.AddIngredientGroupsAsync(recipe.IngredientGroups);
+
+        foreach (var ingredientGroup in recipe.IngredientGroups)
+        {
+            foreach (var step in ingredientGroup.Steps)
+            {
+                step.IngredientGroupId = ingredientGroup.Id;
+            }
+        }
+
+        await _recipeRepository.UpdateRecipeAsync(recipe);
+
 
         return recipe;
     }

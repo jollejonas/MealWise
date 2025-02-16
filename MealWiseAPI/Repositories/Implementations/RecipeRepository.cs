@@ -14,10 +14,12 @@ public class RecipeRepository : IRecipeRepository
     }
     public async Task<IEnumerable<Recipe>> GetRecipesAsync()
     {
-        return await _context.Recipes.
-            Include(r => r.IngredientGroups)
-                .ThenInclude(ri => ri.IngredientGroupIngredients)
+        return await _context.Recipes
+            .Include(r => r.IngredientGroups)
+                .ThenInclude(g => g.IngredientGroupIngredients)
                 .ThenInclude(igi => igi.Ingredient)
+            .Include(r => r.IngredientGroups)
+                .ThenInclude(g => g.Steps)
             .ToListAsync();
     }
     public async Task<Recipe> GetRecipeByIdAsync(int id)
@@ -34,6 +36,12 @@ public class RecipeRepository : IRecipeRepository
         await _context.SaveChangesAsync();
         return recipe;
     }
+    public async Task AddIngredientGroupsAsync(IEnumerable<IngredientGroup> ingredientGroups)
+    {
+        _context.IngredientGroups.AddRange(ingredientGroups);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<Recipe> UpdateRecipeAsync(Recipe recipe)
     {
         _context.Recipes.Update(recipe);

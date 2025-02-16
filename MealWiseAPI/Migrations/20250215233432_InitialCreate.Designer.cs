@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MealWiseAPI.Migrations
 {
     [DbContext(typeof(MealWiseContext))]
-    [Migration("20250210154152_InitialCreate")]
+    [Migration("20250215233432_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -213,19 +213,19 @@ namespace MealWiseAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("IngredientGroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Instruction")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("int");
 
                     b.Property<int>("StepNumber")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipeId");
+                    b.HasIndex("IngredientGroupId");
 
                     b.ToTable("RecipeSteps");
                 });
@@ -404,13 +404,13 @@ namespace MealWiseAPI.Migrations
 
             modelBuilder.Entity("MealWiseAPI.Models.RecipeStep", b =>
                 {
-                    b.HasOne("MealWiseAPI.Models.Recipe", "Recipe")
+                    b.HasOne("MealWiseAPI.Models.IngredientGroup", "IngredientGroup")
                         .WithMany("Steps")
-                        .HasForeignKey("RecipeId")
+                        .HasForeignKey("IngredientGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Recipe");
+                    b.Navigation("IngredientGroup");
                 });
 
             modelBuilder.Entity("MealWiseAPI.Models.ShoppingList", b =>
@@ -444,6 +444,8 @@ namespace MealWiseAPI.Migrations
             modelBuilder.Entity("MealWiseAPI.Models.IngredientGroup", b =>
                 {
                     b.Navigation("IngredientGroupIngredients");
+
+                    b.Navigation("Steps");
                 });
 
             modelBuilder.Entity("MealWiseAPI.Models.MealPlan", b =>
@@ -454,8 +456,6 @@ namespace MealWiseAPI.Migrations
             modelBuilder.Entity("MealWiseAPI.Models.Recipe", b =>
                 {
                     b.Navigation("IngredientGroups");
-
-                    b.Navigation("Steps");
                 });
 
             modelBuilder.Entity("MealWiseAPI.Models.ShoppingList", b =>

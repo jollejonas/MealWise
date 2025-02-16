@@ -217,17 +217,12 @@ namespace MealWiseAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecipeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("StepNumber")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IngredientGroupId");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("RecipeSteps");
                 });
@@ -412,10 +407,6 @@ namespace MealWiseAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MealWiseAPI.Models.Recipe", null)
-                        .WithMany("Steps")
-                        .HasForeignKey("RecipeId");
-
                     b.Navigation("IngredientGroup");
                 });
 
@@ -462,8 +453,6 @@ namespace MealWiseAPI.Migrations
             modelBuilder.Entity("MealWiseAPI.Models.Recipe", b =>
                 {
                     b.Navigation("IngredientGroups");
-
-                    b.Navigation("Steps");
                 });
 
             modelBuilder.Entity("MealWiseAPI.Models.ShoppingList", b =>

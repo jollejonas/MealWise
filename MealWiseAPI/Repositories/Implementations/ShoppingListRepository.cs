@@ -58,13 +58,14 @@ public class ShoppingListRepository : IShoppingListRepository
                     .ThenInclude(r => r.IngredientGroups)
                         .ThenInclude(ig => ig.IngredientGroupIngredients)
                             .ThenInclude(igi => igi.Ingredient)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(mp => mp.Id == mealPlanId);
 
         if (mealPlan == null)
         {
             return null;
         }
-
+        Console.WriteLine($"{mealPlan.Name}: ");
         var shoppingList = new ShoppingList
         {
             Name = $"Indkøbsliste til madplanen: {mealPlan.Name}",
@@ -78,12 +79,19 @@ public class ShoppingListRepository : IShoppingListRepository
 
         foreach (var mealRecipe in mealPlan.MealPlanRecipes)
         {
+            Console.WriteLine($"🍲 MealRecipe: {mealRecipe.Id} - {mealRecipe.Recipe.IngredientGroups.Count}");
             foreach (var ingredientGroup in mealRecipe.Recipe.IngredientGroups)
             {
+                Console.WriteLine($"🔹 IngredientGroup: {ingredientGroup.Id} har {ingredientGroup.IngredientGroupIngredients.Count} ingredienser");
+
                 foreach (var ingredient in ingredientGroup.IngredientGroupIngredients)
                 {
+                    Console.WriteLine($"🔸 IngredientGroupIngredient: {ingredient.Id}, IngredientId: {ingredient.IngredientId}, Quantity: {ingredient.Quantity}, UnitOverride: {ingredient.UnitOverride}");
+
                     if (ingredient.Ingredient == null)
                     {
+                        Console.WriteLine($"❌ Fejl: Ingredient er null for IngredientGroupIngredient {ingredient.Id}");
+
                         continue;
                     }
 
@@ -108,6 +116,9 @@ public class ShoppingListRepository : IShoppingListRepository
                 }
             }
         }
+
+        Console.WriteLine($"📋 Antal ingredienser i shoppingList: {ingredientDict.Count}");
+
 
         shoppingList.Items = ingredientDict
             .Select(i => new ShoppingListItem

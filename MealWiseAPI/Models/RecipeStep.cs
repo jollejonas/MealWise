@@ -9,5 +9,5 @@ public class RecipeStep
     public string Instruction { get; set; }
     [ForeignKey("IngredientGroup")]
     public int IngredientGroupId { get; set; }
-    public IngredientGroup IngredientGroup { get; set; }
+    public IngredientGroup? IngredientGroup { get; set; }
 }
