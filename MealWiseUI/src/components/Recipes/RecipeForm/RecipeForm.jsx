@@ -61,9 +61,16 @@ const RecipeForm = () => {
                     name: group.name.trim(),
                     ingredientGroupIngredients: group.ingredients
                         .map(ingredient => ({
-                            ingredientName: ingredient.name.trim(), 
+                            id: 0,
+                            ingredientId: ingredient.ingredientId ?? 0,
+                            ingredient: ingredient.ingredientId ? null : {
+                                id: 0,
+                                name: ingredient.name.trim(),
+                                unitType: ingredient.unitOverride?.trim() || null,
+                            },
                             quantity: ingredient.quantity ? parseFloat(ingredient.quantity) : null,
-                            unitOverride: ingredient.unitOverride?.trim() || null
+                            unitOverride: ingredient.unitOverride?.trim() || null,
+
                     })),
                 steps: group.steps.map((step, index) => ({
                     stepNumber: index + 1, 

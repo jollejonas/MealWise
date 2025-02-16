@@ -36,17 +36,18 @@ public class RecipeService : IRecipeService
 
             foreach (var ingredient in ingredientGroup.IngredientGroupIngredients)
             {
-                if (!string.IsNullOrWhiteSpace(ingredient.Ingredient.Name))
-                {
-                    var existingIngredient = await _ingredientService.GetOrCreateIngredientAsync(ingredient.Ingredient.Name, ingredient.Ingredient.UnitType);
+                var resolvedIngredient = await _ingredientService.GetOrCreateIngredientAsync(
+                    ingredient.Ingredient.Name,
+                    ingredient.UnitOverride
+);
 
-                    ingredient.IngredientId = existingIngredient.Id;
-                    ingredient.Ingredient = existingIngredient;
-                }
+                ingredient.IngredientId = resolvedIngredient.Id;
 
-                if (ingredient.Ingredient == null)
+                Console.WriteLine($"🛠 Ingredient set: {ingredient.IngredientId} ({ingredient.Ingredient.Name})");
+
+                if (ingredient.IngredientId == 0)
                 {
-                    throw new ArgumentException($"Ingredient is missing for IngredientId {ingredient.IngredientId}");
+                    throw new ArgumentException($"Ingredient ID is missing for ingredient: {ingredient.Ingredient.Name}");
                 }
             }
         }
