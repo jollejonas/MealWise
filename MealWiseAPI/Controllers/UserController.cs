@@ -23,11 +23,6 @@ public class UserController : ControllerBase
     {
         return await _userService.GetUserByIdAsync(id);
     }
-    [HttpPost]
-    public async Task<User> CreateUser([FromBody] User user)
-    {
-        return await _userService.CreateUserAsync(user);
-    }
     [HttpPut]
     public async Task<User> UpdateUser([FromBody] User user)
     {

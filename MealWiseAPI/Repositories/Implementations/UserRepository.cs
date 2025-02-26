@@ -20,8 +20,20 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.FindAsync(id);
     }
+    public async Task<User> GetUserByUsernameAsync(string username)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+    }
     public async Task<User> CreateUserAsync(User user)
     {
+        var existingUser = await _context.Users
+            .FirstOrDefaultAsync(u => u.Username == user.Username || u.Email == user.Email);
+
+        if (existingUser != null)
+        {
+            throw new Exception("Brugernavn eller email eksisterer allerede.");
+        }
+
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
         return user;

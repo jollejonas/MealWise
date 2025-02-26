@@ -18,7 +18,27 @@ public class UserService : IUserService
     }
     public async Task<User> GetUserByIdAsync(int id)
     {
-        return await _userRepository.GetUserByIdAsync(id);
+        var user = await _userRepository.GetUserByIdAsync(id);
+        if (user == null)
+        {
+            throw new Exception("User not found.");
+        }
+
+        user.PasswordHash = null;
+
+        return user;
+    }
+    public async Task<User> GetUserByUsernameAsync(string username)
+    {
+        var user = await _userRepository.GetUserByUsernameAsync(username);
+        if (user == null)
+        {
+            throw new Exception("User nof found.");
+        }
+
+        user.PasswordHash = null;
+
+        return user;
     }
     public async Task<User> CreateUserAsync(User user)
     {

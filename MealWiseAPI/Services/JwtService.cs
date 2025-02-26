@@ -11,7 +11,7 @@ public class JwtService
         _config = config;
     }
 
-    public string GenerateToken(string userId, string userEmail)
+    public string GenerateToken(string userId, string userEmail, string role)
     {
         var jwtSettings = _config.GetSection("JwtSettings");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]));
@@ -20,6 +20,7 @@ public class JwtService
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId),
             new Claim(JwtRegisteredClaimNames.Email, userEmail),
+            new Claim(ClaimTypes.Role, role),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
