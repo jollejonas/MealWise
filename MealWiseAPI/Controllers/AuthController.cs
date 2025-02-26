@@ -54,6 +54,7 @@ public class AuthController : ControllerBase
         {
             Username = userDto.Username,
             Email = userDto.Email,
+            Name = "John Doe",
             PasswordHash = hashedPassword,
             Role = userDto.Role,
             CreatedAt = DateTime.UtcNow,
@@ -61,6 +62,10 @@ public class AuthController : ControllerBase
         };
 
         var createdUser = await _userService.CreateUserAsync(user);
+
+        Console.WriteLine($"✅ Bruger oprettet: {createdUser.Username}, ID: {createdUser.Id}");
+        Console.WriteLine($"🔍 Tjek databasen for at sikre, at brugeren eksisterer!");
+
         return CreatedAtAction(nameof(Register), new { userId = createdUser.Id }, new { message = "Bruger oprettet!" });
     }
 }

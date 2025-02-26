@@ -10,6 +10,9 @@ import MealPlanDetails from './pages/MealPlanDetails.jsx'
 import MealPlans from './pages/MealPlans.jsx'
 import ShoppingLists from './pages/ShoppingLists.jsx'
 import ShoppingListDetails from './pages/ShoppingListDetails.jsx'
+import Login from './pages/Login.jsx'
+import Logout from './pages/Logout.jsx'
+import { isAuthenticated } from './services/authService.js'
 import { Container } from 'react-bootstrap'
 
 function App() {
@@ -28,6 +31,11 @@ function App() {
         <Route path="/madplan/:id" element={<MealPlanDetails />} />
         <Route path="/indkobslister" element={<ShoppingLists />} />
         <Route path="/indkobsliste/:id" element={<ShoppingListDetails />} />
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/logout" 
+        element={isAuthenticated() ? <Logout /> : <Navigate to ="/login" />} />
+
         </Routes>
       </Router>
     </Container>

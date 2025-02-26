@@ -30,15 +30,7 @@ public class UserService : IUserService
     }
     public async Task<User> GetUserByUsernameAsync(string username)
     {
-        var user = await _userRepository.GetUserByUsernameAsync(username);
-        if (user == null)
-        {
-            throw new Exception("User nof found.");
-        }
-
-        user.PasswordHash = null;
-
-        return user;
+        return await _userRepository.GetUserByUsernameAsync(username);
     }
     public async Task<User> CreateUserAsync(User user)
     {

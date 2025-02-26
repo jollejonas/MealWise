@@ -36,6 +36,7 @@ public class UserRepository : IUserRepository
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
+        Console.WriteLine($"Bruger gemt i databasen: {user.Username}");
         return user;
     }
     public async Task<User> UpdateUserAsync(User user)
