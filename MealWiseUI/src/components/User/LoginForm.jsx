@@ -1,19 +1,23 @@
 import { useState } from 'react';
 import { login } from '../../services/authService';
-import { useNavigate } from 'react-router-dom';
 
-const LoginForm = () => {
+const LoginForm = ({ onSuccess }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
 
     const handleLogin = async (event) => {
         event.preventDefault();
         setError(null);
+
         try {
-            await login(username, password);
-            navigate('/logout');
+            const response = await login(username, password);
+
+            if (response?.token) {
+                onSuccess(); // Luk modalen ved succesfuldt login
+            } else {
+                setError("Login fejlede. Tjek dine oplysninger.");
+            }
         } catch (error) {
             setError("Login fejlede. Tjek dine oplysninger.");
         }

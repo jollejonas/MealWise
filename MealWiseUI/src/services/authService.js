@@ -11,6 +11,7 @@ export const login = async (username, password) => {
         },
         { headers: { "Content-Type": "application/json" } } );
         localStorage.setItem("token", response.data.token);
+        window.dispatchEvent(new Event("storage"));
         return response.data;
     } catch (error) {
         console.error("Login fejlede:", error.response?.data || error.message);
@@ -18,8 +19,27 @@ export const login = async (username, password) => {
     }
 };
 
+export const register = async (username, email, password) => {
+    try 
+    {
+        const response = await axios.post(API_URL + "register", {
+            username,
+            email,
+            password,
+        },
+        { headers: { "Content-Type": "application/json" } } );
+        
+        return response.data;
+    } catch (error) {
+        console.error("Registrering fejlede:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+
 export const logout = () => {
     localStorage.removeItem("token");
+    window.dispatchEvent(new Event("storage"));
 };
 
 export const getToken = () => {
