@@ -50,15 +50,38 @@ export const isAuthenticated = () => {
     return !!getToken();
 };
 
-export const getUserIdFromToken = () => {
+export const getUserInfoFromToken = () => {
     const token = getToken();
-    if (!token) return null;
+    if (!token) return { userId: null, role: null};
     
     try {
         const decoded = jwtDecode(token);
-        return decoded.sub;
+        console.log("Decoded token data:", decoded);
+
+        const roleClaim = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+        const role = decoded[roleClaim] || null;
+        console.log(role);
+        return {
+            userId: decoded.sub || null,
+            role: role,
+        };
     } catch (error) {
         console.error("Kunne ikke dekode token:", error);
-        return null;
+        return { userId: null, role: null};
     }
 };
+
+export const hasRole = (requiredRole) => {
+    const { role }  = getUserInfoFromToken();
+    if(!role) return false;
+
+    const rolesHierarchy = {
+        "User": 0,
+        "Admin": 1,
+    };
+
+    console.log(rolesHierarchy[role]);
+    console.log(rolesHierarchy[requiredRole]);
+
+    return rolesHierarchy[role] >= rolesHierarchy[requiredRole];
+}

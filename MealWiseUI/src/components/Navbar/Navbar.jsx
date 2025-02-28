@@ -1,14 +1,16 @@
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router';
-import { logout, isAuthenticated } from '../../services/authService';
+import { useAuth } from '../../context/AuthContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserModal from '../User/UserModal';
 import LoginForm from '../User/LoginForm';
 import RegisterForm from '../User/RegisterForm';
 
 function MainNavbar() {
-    const [isLoggedIn, setIsLoggedIn] = useState(isAuthenticated());
+    const { isLoggedIn, role, handleLogout } = useAuth();
+    const isAdmin = role === "Admin";
+
     const [showModal, setShowModal] = useState(false);
     const [isRegister, setIsRegister] = useState(false);
 
@@ -25,20 +27,6 @@ function MainNavbar() {
     const handleClose = () => {
         setShowModal(false);
     }
-
-    const handleLogout = () => {
-        logout();
-        setIsLoggedIn(false);
-    }
-
-    useEffect(() => {
-        const handleStorageChange = () => {
-            setIsLoggedIn(isAuthenticated());
-        };
-
-        window.addEventListener("storage", handleStorageChange);
-        return () => window.removeEventListener("storage", handleStorageChange);
-    }, []);
 
     return (
         <>
@@ -65,7 +53,10 @@ function MainNavbar() {
                         <Nav.Link onClick={handleShowLogin}>Login</Nav.Link>
                         </>
                     ) : (
+                        <>
+                        {isAdmin ? <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link> : null }
                         <Nav.Link onClick={handleLogout}>Log ud</Nav.Link>
+                        </>
                     )}
                 </Nav>
             </Navbar.Collapse>

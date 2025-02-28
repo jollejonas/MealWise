@@ -10,28 +10,29 @@ import MealPlanDetails from './pages/MealPlanDetails.jsx'
 import MealPlans from './pages/MealPlans.jsx'
 import ShoppingLists from './pages/ShoppingLists.jsx'
 import ShoppingListDetails from './pages/ShoppingListDetails.jsx'
-import { isAuthenticated } from './services/authService.js'
 import { Container } from 'react-bootstrap'
-import { Navigate } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext.jsx'
 
 function App() {
 
   return (
     <Container fluid className="m-0">
-    <Router>
-      <MainNavbar />
-        <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/opskrifter" element={<Recipes />} />
-        <Route path="/opret-opskrift" element={<CreateRecipe />} />
-        <Route path="/opskrift/:id" element={<RecipeDetails />} />
-        <Route path="/madplaner" element={<MealPlans />} />
-        <Route path="/opret-madplan" element={<CreateMealPlan />} />
-        <Route path="/madplan/:id" element={<MealPlanDetails />} />
-        <Route path="/indkobslister" element={<ShoppingLists />} />
-        <Route path="/indkobsliste/:id" element={<ShoppingListDetails />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <MainNavbar />
+            <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/opskrifter" element={<Recipes />} />
+            <Route path="/opret-opskrift" element={<CreateRecipe />} />
+            <Route path="/opskrift/:id" element={<RecipeDetails />} />
+            <Route path="/madplaner" element={<MealPlans />} />
+            <Route path="/opret-madplan" element={<CreateMealPlan />} />
+            <Route path="/madplan/:id" element={<MealPlanDetails />} />
+            <Route path="/indkobslister" element={<ShoppingLists />} />
+            <Route path="/indkobsliste/:id" element={<ShoppingListDetails />} />
+            </Routes>
+          </Router>
+      </AuthProvider>
     </Container>
   )
 }
