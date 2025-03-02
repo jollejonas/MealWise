@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router'
 import Home from './pages/Home'
 import Recipes from './pages/Recipes.jsx'
 import MainNavbar from './components/Navbar/Navbar.jsx'
@@ -12,14 +12,16 @@ import ShoppingLists from './pages/ShoppingLists.jsx'
 import ShoppingListDetails from './pages/ShoppingListDetails.jsx'
 import { Container } from 'react-bootstrap'
 import { AuthProvider } from './context/AuthContext.jsx'
+import Dashboard from './pages/Dashboard.jsx'
 
-function App() {
+function Layout() {
+  const location = useLocation();
+
+  const hideNavnbarRoutes = ["/dashboard"];
 
   return (
     <Container fluid className="m-0">
-      <AuthProvider>
-        <Router>
-          <MainNavbar />
+          { !hideNavnbarRoutes.includes(location.pathname) && <MainNavbar /> }
             <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/opskrifter" element={<Recipes />} />
@@ -30,11 +32,21 @@ function App() {
             <Route path="/madplan/:id" element={<MealPlanDetails />} />
             <Route path="/indkobslister" element={<ShoppingLists />} />
             <Route path="/indkobsliste/:id" element={<ShoppingListDetails />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
-          </Router>
-      </AuthProvider>
     </Container>
   )
 }
 
-export default App
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Layout />
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
